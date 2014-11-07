@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface Facade {
 
+	//Entity
+	
 	Entity create(Entity entity);
 
 	Entity findEntityById(Long id);
@@ -17,5 +19,16 @@ public interface Facade {
 	Entity update(Entity entity);
 	
 	void deleteEntity(Long id);
+
+	//Attribute
+	
+	Attribute create(Attribute attribute);
+
+	Attribute findAttributeById(Long id);
+
+	Attribute findAttributeByNameAndEntityFullName(String name,
+			String fullEntityName);
+
+	Attribute update(Attribute attribute);
 
 }

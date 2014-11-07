@@ -4,4 +4,5 @@ public interface DaoFactory {
 
 	EntityDao createEntityDao();
 
+	AttributeDao createAttributeDao();
 }
