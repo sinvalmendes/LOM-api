@@ -5,6 +5,6 @@ import com.nanuvem.lom.api.AttributeValue;
 
 public interface AttributeValueDao {
 
-	void create(AttributeValue value);
+	AttributeValue create(AttributeValue value);
 
 }

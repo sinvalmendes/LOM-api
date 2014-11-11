@@ -16,7 +16,7 @@ public class EntityHelper {
 		Entity entity = new Entity();
 		entity.setName(name);
 		entity.setNamespace(namespace);
-		facade.create(entity);
+		entity = facade.create(entity);
 		return entity;
 	}
 
@@ -49,15 +49,17 @@ public class EntityHelper {
 		Entity ea = new Entity();
 		ea.setNamespace(firstentitynamespace);
 		ea.setName(firstentityname);
-		facade.create(ea);
+		ea = facade.create(ea);
 	
 		Entity eb = new Entity();
 		eb.setNamespace(secondentitynamespace);
 		eb.setName(secondentityname);
-		facade.create(eb);
+		eb = facade.create(eb);
 	
 		try {
-			facade.update(eb);
+			ea.setName(firstentitynameupdate);
+			ea.setNamespace(firstentitynamespaceupdate);
+			facade.update(ea);
 			fail();
 		} catch (MetadataException me) {
 			Assert.assertEquals(expectedExceptionMessage, me.getMessage());
@@ -120,7 +122,7 @@ public class EntityHelper {
 		Entity entity = new Entity();
 		entity.setNamespace(firstNamespace);
 		entity.setName(firstName);
-		facade.create(entity);
+		entity = facade.create(entity);
 	
 		Assert.assertNotNull(entity.getId());
 		Assert.assertEquals((Integer) 0, entity.getVersion());
@@ -147,12 +149,12 @@ public class EntityHelper {
 		Entity entity1 = new Entity();
 		entity1.setNamespace(entity1namespace);
 		entity1.setName(entity1name);
-		facade.create(entity1);
+		entity1 = facade.create(entity1);
 	
 		Entity entity2 = new Entity();
 		entity2.setNamespace(entity2namespace);
 		entity2.setName(entity2name);
-		facade.create(entity2);
+		entity2 = facade.create(entity2);
 	
 		Assert.assertNotNull(entity1.getId());
 		Assert.assertNotNull(entity2.getId());
@@ -173,7 +175,7 @@ public class EntityHelper {
 		Entity entity = new Entity();
 		entity.setNamespace(namespace);
 		entity.setName(name);
-		facade.create(entity);
+		entity = facade.create(entity);
 	
 		Assert.assertNotNull(entity.getId());
 		Assert.assertEquals((Integer) 0, entity.getVersion());
@@ -184,7 +186,7 @@ public class EntityHelper {
 		Entity entity = new Entity();
 		entity.setNamespace(namespace);
 		entity.setName(name);
-		facade.create(entity);
+		entity = facade.create(entity);
 	
 		Assert.assertNotNull(entity.getId());
 		Assert.assertEquals((Integer) 0, entity.getVersion());

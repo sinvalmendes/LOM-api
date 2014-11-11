@@ -28,28 +28,9 @@ public class AttributeHelper {
 		attribute.setSequence(attributeSequence);
 		attribute.setType(attributeType);
 		attribute.setConfiguration(attributeConfiguration);
-		facade.create(attribute);
+		attribute = facade.create(attribute);
 
 		return attribute;
-	}
-
-	public static Entity newEntity(String entityFullName) {
-		String namespace = null;
-		String name = null;
-
-		if (entityFullName.contains(".")) {
-			namespace = entityFullName.substring(0,
-					entityFullName.lastIndexOf("."));
-			name = entityFullName.substring(entityFullName.lastIndexOf(".") + 1,
-					entityFullName.length());
-		} else {
-			name = entityFullName;
-		}
-
-		Entity entity = new Entity();
-		entity.setNamespace(namespace);
-		entity.setName(name);
-		return entity;
 	}
 
 	public static void expectExceptionOnCreateInvalidAttribute(

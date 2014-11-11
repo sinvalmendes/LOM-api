@@ -153,7 +153,7 @@ public abstract class EntityServiceTest {
 		Entity ea = new Entity();
 		ea.setNamespace("a");
 		ea.setName("aaa");
-		facade.create(ea);
+		ea = facade.create(ea);
 
 		Entity eb = new Entity();
 		eb.setNamespace("b");
@@ -189,9 +189,9 @@ public abstract class EntityServiceTest {
 	public void renameMoveCausingTwoEntitiesWithSameNameInDefaultPackage() {
 		EntityHelper.expectExceptionOnInvalidEntityUpdate(facade, "a", "aaa", "b", "bbb", "b", "bbb",
 				"The b.bbb Entity already exists");
-		EntityHelper.expectExceptionOnInvalidEntityUpdate(facade, "a", "aaa", "b", "aaa", "b", "bbb",
+		EntityHelper.expectExceptionOnInvalidEntityUpdate(facade, "a", "aaa", "b", "aaa", "b", "aaa",
 				"The b.aaa Entity already exists");
-		EntityHelper.expectExceptionOnInvalidEntityUpdate(facade, "a", "aaa", "a", "bbb", "b", "bbb",
+		EntityHelper.expectExceptionOnInvalidEntityUpdate(facade, "a", "aaa", "a", "bbb", "a", "bbb",
 				"The a.bbb Entity already exists");
 		EntityHelper.expectExceptionOnInvalidEntityUpdate(facade, "a.b.c", "aaa", "b.c", "bbb",
 				"b.c", "bbb", "The b.c.bbb Entity already exists");
@@ -499,7 +499,7 @@ public abstract class EntityServiceTest {
 		Entity entity2 = EntityHelper.createEntity(facade, null, "n2");
 		Assert.assertEquals(0, facade.listEntitiesByFullName(".n1").size());
 
-		Entity foundEntity2 = facade.findEntityByFullName(".n2");
+		Entity foundEntity2 = facade.findEntityByFullName("n2");
 		Assert.assertEquals(entity2, foundEntity2);
 		Assert.assertEquals(0, facade.listEntitiesByFullName("ns1.").size());
 	}

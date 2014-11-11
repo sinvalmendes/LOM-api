@@ -44,7 +44,8 @@ public class Entity implements Serializable {
 	}
 
 	public void setNamespace(String namespace) {
-		this.namespace = namespace;
+		
+		this.namespace = (namespace == null) ? "" : namespace;
 	}
 
 	public String getFullName() {
@@ -79,7 +80,6 @@ public class Entity implements Serializable {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((namespace == null) ? 0 : namespace.hashCode());
-		result = prime * result + ((version == null) ? 0 : version.hashCode());
 		return result;
 	}
 
@@ -107,11 +107,14 @@ public class Entity implements Serializable {
 				return false;
 		} else if (!namespace.equals(other.namespace))
 			return false;
-		if (version == null) {
-			if (other.version != null)
-				return false;
-		} else if (!version.equals(other.version))
-			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Entity [namespace=" + namespace + ", name=" + name + ", id="
+				+ id + ", version=" + version + "]";
+	}
+	
+	
 }

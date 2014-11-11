@@ -5,6 +5,18 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Attribute implements Serializable {
 
+	public final static String MAXVALUE_CONFIGURATION_NAME = "maxvalue";
+	public final static String MINVALUE_CONFIGURATION_NAME = "minvalue";
+	public final static String MAXREPEAT_CONFIGURATION_NAME = "maxRepeat";
+	public final static String MINSYMBOLS_CONFIGURATION_NAME = "minSymbols";
+	public final static String MINNUMBERS_CONFIGURATION_NAME = "minNumbers";
+	public final static String MINUPPERS_CONFIGURATION_NAME = "minUppers";
+	public final static String MAXLENGTH_CONFIGURATION_NAME = "maxlength";
+	public final static String MINLENGTH_CONFIGURATION_NAME = "minlength";
+	public final static String REGEX_CONFIGURATION_NAME = "regex";
+	public final static String DEFAULT_CONFIGURATION_NAME = "default";
+	public final static String MANDATORY_CONFIGURATION_NAME = "mandatory";
+	
 	private Long id;
 
 	private Integer version;
@@ -23,7 +35,6 @@ public class Attribute implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((entity == null) ? 0 : entity.hashCode());
 		result = prime * result
 				+ ((configuration == null) ? 0 : configuration.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -44,11 +55,6 @@ public class Attribute implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Attribute other = (Attribute) obj;
-		if (entity == null) {
-			if (other.entity != null)
-				return false;
-		} else if (!entity.equals(other.entity))
-			return false;
 		if (configuration == null) {
 			if (other.configuration != null)
 				return false;
@@ -133,6 +139,13 @@ public class Attribute implements Serializable {
 
 	public void setEntity(Entity entity) {
 		this.entity = entity;
+	}
+
+	@Override
+	public String toString() {
+		return "Attribute [sequence=" + sequence + ", name=" + name + ", type="
+				+ type + ", configuration=" + configuration + ", id=" + id
+				+ ", version=" + version + "]";
 	}
 
 }

@@ -31,4 +31,10 @@ public interface Facade {
 
 	Attribute update(Attribute attribute);
 
+	//Instance
+	
+	Instance create(Instance instance);
+
+	Instance findInstanceById(Long id);
+
 }

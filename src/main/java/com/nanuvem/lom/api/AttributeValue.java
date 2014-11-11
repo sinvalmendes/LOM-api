@@ -11,7 +11,7 @@ public class AttributeValue implements Serializable {
 
 	private Instance instance;
 	private Attribute attribute;
-	private Object value;
+	private String value;
 
 	public Long getId() {
 		return id;
@@ -45,11 +45,11 @@ public class AttributeValue implements Serializable {
 		this.instance = instance;
 	}
 
-	public Object getValue() {
+	public String getValue() {
 		return value;
 	}
 
-	public void setValue(Object value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 
@@ -103,4 +103,12 @@ public class AttributeValue implements Serializable {
 		result = prime * result + ((version == null) ? 0 : version.hashCode());
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "AttributeValue [value=" + value + ", id=" + id + ", version="
+				+ version + "]";
+	}
+	
+	
 }

@@ -82,4 +82,11 @@ public class Instance implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Instance [id=" + id + ", version=" + version + ", values="
+				+ values + "]";
+	}
+
+	
 }
