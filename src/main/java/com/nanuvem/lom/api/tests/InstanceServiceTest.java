@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.nanuvem.lom.api.AttributeType;
-import com.nanuvem.lom.api.AttributeValue;
 import com.nanuvem.lom.api.Facade;
 
 public abstract class InstanceServiceTest {
@@ -21,22 +20,20 @@ public abstract class InstanceServiceTest {
 	@Test
 	public void unknownClass() {
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade, "a",
-				"Entity not found: a", InstanceHelper.attributeValue("age", "30"));
+				"Entity not found: a", "30");
 
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade, "abc.a",
-				"Entity not found: abc.a",
-				InstanceHelper.attributeValue("age", "30"));
+				"Entity not found: abc.a", "30");
 	}
 
 	@Test
 	public void nullClass() {
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade, null,
-				"Invalid value for Instance class: The class is mandatory",
-				InstanceHelper.attributeValue("age", "30"));
+				"Invalid value for Instance entity: The entity is mandatory", "30");
 	}
 
 	@Test
-	public void classWithoutAttributes() {
+	public void entityWithoutAttributes() {
 		EntityHelper.createEntity(facade, "abc", "a");
 		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a");
 
@@ -51,28 +48,7 @@ public abstract class InstanceServiceTest {
 	}
 
 	@Test
-	public void classWithoutAttributesUnknownAttributes() {
-		EntityHelper.createEntity(facade, "system", "Client");
-
-		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade,
-				"system.Client", "Unknown attribute for system.Client: age",
-				InstanceHelper.attributeValue("age", "30"));
-
-		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade,
-				"system.Client", "Unknown attribute for system.Client: height",
-				InstanceHelper.attributeValue("height", "1.85"));
-
-		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade,
-				"system.Client", "Unknown attribute for system.Client: name",
-				InstanceHelper.attributeValue("name", "John"));
-
-		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade,
-				"system.Client", "Unknown attribute for system.Client: active",
-				InstanceHelper.attributeValue("active", "true"));
-	}
-
-	@Test
-	public void classWithKnownAttributesAndWithoutConfiguration() {
+	public void entityWithKnownAttributesAndWithoutConfiguration() {
 		EntityHelper.createEntity(facade, "system", "Client");
 		AttributeHelper.createOneAttribute(facade, "system.Client", null, "pa",
 				AttributeType.TEXT, null);
@@ -102,60 +78,58 @@ public abstract class InstanceServiceTest {
 				"pd", AttributeType.PASSWORD, null);
 
 		InstanceHelper.createAndVerifyOneInstance(facade, "system.Client");
+		InstanceHelper.createAndVerifyOneInstance(facade, "system.Client", "va");
 		InstanceHelper.createAndVerifyOneInstance(facade, "system.User");
+		InstanceHelper.createAndVerifyOneInstance(facade, "system.User", "va", "vb");
 		InstanceHelper
 				.createAndVerifyOneInstance(facade, "system.Organization");
+		InstanceHelper
+		.createAndVerifyOneInstance(facade, "system.Organization", "va", "vb", "3");
 		InstanceHelper.createAndVerifyOneInstance(facade, "system.Category");
+		InstanceHelper.createAndVerifyOneInstance(facade, "system.Category", "va", "vb", "3", "vd");
 	}
 
 	@Test
-	public void instanceWithValidValuesForTheConfigurationOfAttributesText() {
+	public void instanceWithValidValuesForConfigurationOfTextAttributes() {
 		EntityHelper.createEntity(facade, "abc", "a");
 		AttributeHelper.createOneAttribute(facade, "abc.a", null, "name",
 				AttributeType.TEXT, "{\"mandatory\": true}");
-		AttributeValue value1 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.a", "Jose");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a", value1);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a", "Jose");
+
+		EntityHelper.createEntity(facade, "abc", "a1");
+		AttributeHelper.createOneAttribute(facade, "abc.a1", null, "name",
+				AttributeType.TEXT, null);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a", "Jose");
 
 		EntityHelper.createEntity(facade, "abc", "b");
 		AttributeHelper.createOneAttribute(facade, "abc.b", null, "name",
 				AttributeType.TEXT,
 				"{\"mandatory\": true, \"default\": \"Michael\"}");
-		AttributeValue value2 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.b", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.b", value2);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.b", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "c");
 		AttributeHelper
 				.createOneAttribute(facade, "abc.c", null, "name",
 						AttributeType.TEXT,
 						"{\"mandatory\": true, \"default\": \"Johson\", \"minlength\": 6}");
-		AttributeValue value3 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.c", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.c", value3);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.c", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "d");
 		AttributeHelper.createOneAttribute(facade, "abc.d", null, "name",
 				AttributeType.TEXT, "{\"mandatory\": true, \"minlength\": 6}");
-		AttributeValue value4 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.d", "Johson");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.d", value4);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.d", "Johson");
 
 		EntityHelper.createEntity(facade, "abc", "e");
 		AttributeHelper
 				.createOneAttribute(facade, "abc.e", null, "name",
 						AttributeType.TEXT,
 						"{\"mandatory\": true, \"default\": \"Johson\", \"maxlength\" : 6}");
-		AttributeValue value5 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.e", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.e", value5);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.e", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "f");
 		AttributeHelper.createOneAttribute(facade, "abc.f", null, "name",
 				AttributeType.TEXT, "{\"mandatory\": true, \"maxlength\" : 6}");
-		AttributeValue value6 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.f", "Johson");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.f", value6);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.f", "Johson");
 
 		EntityHelper.createEntity(facade, "abc", "g");
 		AttributeHelper
@@ -166,17 +140,13 @@ public abstract class InstanceServiceTest {
 						"name",
 						AttributeType.TEXT,
 						"{\"mandatory\": true, \"default\": \"Johson\", \"minlength\": 6, \"maxlength\" : 6}");
-		AttributeValue value7 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.g", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.g", value7);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.g", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "i");
 		AttributeHelper.createOneAttribute(facade, "abc.i", null, "name",
 				AttributeType.TEXT,
 				"{\"mandatory\": true, \"minlength\": 6, \"maxlength\" : 6}");
-		AttributeValue value8 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.i", "Johson");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.i", value8);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.i", "Johson");
 
 		EntityHelper.createEntity(facade, "abc", "j");
 		AttributeHelper
@@ -187,17 +157,13 @@ public abstract class InstanceServiceTest {
 						"name",
 						AttributeType.TEXT,
 						"{\"mandatory\": true, \"default\": \"Johson\", \"minlength\": 3, \"maxlength\" : 8}");
-		AttributeValue value9 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.j", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.j", value9);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.j", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "k");
 		AttributeHelper.createOneAttribute(facade, "abc.k", null, "name",
 				AttributeType.TEXT,
 				"{\"mandatory\": true, \"minlength\": 3, \"maxlength\" : 8}");
-		AttributeValue value10 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.k", "Johnson");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.k", value10);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.k", "Johson");
 
 		EntityHelper.createEntity(facade, "abc", "l");
 		AttributeHelper
@@ -208,9 +174,7 @@ public abstract class InstanceServiceTest {
 						"name",
 						AttributeType.TEXT,
 						"{\"mandatory\": true, \"default\": \"abc@abc.com\", \"minlength\": 3, \"maxlength\" : 15, \"regex\": \"(\\\\w[-.\\\\w]\\\\w@\\\\w[-._\\\\w]\\\\w.\\\\w{2,3})\"}");
-		AttributeValue value11 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.l", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.l", value11);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.l", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "m");
 		AttributeHelper
@@ -221,9 +185,7 @@ public abstract class InstanceServiceTest {
 						"name",
 						AttributeType.TEXT,
 						"{\"mandatory\": true, \"minlength\": 3, \"maxlength\" : 15, \"regex\": \"(\\\\w[-.\\\\w]\\\\w@\\\\w[-._\\\\w]\\\\w.\\\\w{2,3})\"}");
-		AttributeValue value12 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.m", "abc@abc.com");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.m", value12);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.m", "abc@abc.com");
 	}
 
 	@Test
@@ -231,80 +193,60 @@ public abstract class InstanceServiceTest {
 		EntityHelper.createEntity(facade, "abc", "a");
 		AttributeHelper.createOneAttribute(facade, "abc.a", null, "name",
 				AttributeType.LONGTEXT, "{\"mandatory\": true}");
-		AttributeValue value1 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.a", "Jose");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a", value1);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a", "Jose");
 
 		EntityHelper.createEntity(facade, "abc", "b");
 		AttributeHelper.createOneAttribute(facade, "abc.b", null, "name",
 				AttributeType.LONGTEXT, "{\"default\" : \"default longtext\"}");
-		AttributeValue value2 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.b", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.b", value2);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.b", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "c");
 		AttributeHelper.createOneAttribute(facade, "abc.c", null, "name",
 				AttributeType.LONGTEXT, "{\"default\" : \"default longtext\"}");
-		AttributeValue value3 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.c", "Jose");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.c", value3);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.c", "Jose");
 
 		EntityHelper.createEntity(facade, "abc", "d");
 		AttributeHelper.createOneAttribute(facade, "abc.d", null, "name",
 				AttributeType.LONGTEXT, "{\"minlength\" : 6}");
-		AttributeValue value4 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.d", "Johson");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.d", value4);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.d", "Johson");
 
 		EntityHelper.createEntity(facade, "abc", "e");
 		AttributeHelper.createOneAttribute(facade, "abc.e", null, "name",
 				AttributeType.LONGTEXT,
 				"{\"mandatory\" : true, \"minlength\" : 6}");
-		AttributeValue value5 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.e", "Johson");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.e", value5);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.e", "Johson");
 
 		EntityHelper.createEntity(facade, "abc", "f");
 		AttributeHelper
 				.createOneAttribute(facade, "abc.f", null, "name",
 						AttributeType.LONGTEXT,
 						"{\"mandatory\" : true, \"default\":\"Johson\", \"minlength\" : 6}");
-		AttributeValue value6 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.f", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.f", value6);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.f", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "g");
 		AttributeHelper
 				.createOneAttribute(facade, "abc.g", null, "name",
 						AttributeType.LONGTEXT,
 						"{\"mandatory\" : true, \"default\":\"Johson\", \"minlength\" : 6}");
-		AttributeValue value7 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.g", "abccab");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.g", value7);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.g", "abccab");
 
 		EntityHelper.createEntity(facade, "abc", "h");
 		AttributeHelper.createOneAttribute(facade, "abc.h", null, "name",
 				AttributeType.LONGTEXT, "{\"maxlength\" : 6}");
-		AttributeValue value8 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.h", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.h", value8);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.h", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "i");
 		AttributeHelper.createOneAttribute(facade, "abc.i", null, "name",
 				AttributeType.LONGTEXT,
 				"{\"mandatory\" : true, \"maxlength\" : 6}");
-		AttributeValue value9 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.i", "Johson");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.i", value9);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.i", "Johson");
 
 		EntityHelper.createEntity(facade, "abc", "j");
 		AttributeHelper
 				.createOneAttribute(facade, "abc.j", null, "name",
 						AttributeType.LONGTEXT,
 						"{\"mandatory\" : true, \"default\" : \"Johson\", \"maxlength\" : 6}");
-		AttributeValue value10 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.j", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.j", value10);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.j", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "k");
 		AttributeHelper
@@ -315,9 +257,7 @@ public abstract class InstanceServiceTest {
 						"name",
 						AttributeType.LONGTEXT,
 						"{\"mandatory\" : true, \"default\" : \"Johson\", \"minlength\" : 6, \"maxlength\" : 6}");
-		AttributeValue value11 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.k", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.k", value11);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.k", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "l");
 		AttributeHelper
@@ -328,129 +268,95 @@ public abstract class InstanceServiceTest {
 						"name",
 						AttributeType.LONGTEXT,
 						"{\"mandatory\" : true, \"default\" : \"Johson\", \"minlength\" : 6, \"maxlength\" : 6}");
-		AttributeValue value12 = InstanceHelper.newAttributeValue(facade,
-				"name", "abc.l", "abccba");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.l", value12);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.l", "abccba");
 	}
 
 	public void instanceWithValidValuesForTheConfigurationOfAttributesInteger() {
 		EntityHelper.createEntity(facade, "abc", "a");
 		AttributeHelper.createOneAttribute(facade, "abc.a", null, "number",
 				AttributeType.INTEGER, "{\"default\": 1}");
-		AttributeValue value1 = InstanceHelper.newAttributeValue(facade,
-				"number", "abc.a", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a", value1);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "b");
 		AttributeHelper.createOneAttribute(facade, "abc.b", null, "number",
 				AttributeType.INTEGER, "{\"minvalue\": 1}");
-		AttributeValue value2 = InstanceHelper.newAttributeValue(facade,
-				"number", "abc.b", "1");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.b", value2);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.b", "1");
 
 		EntityHelper.createEntity(facade, "abc", "c");
 		AttributeHelper.createOneAttribute(facade, "abc.c", null, "number",
 				AttributeType.INTEGER, "{\"maxvalue\": 1}");
-		AttributeValue value3 = InstanceHelper.newAttributeValue(facade,
-				"number", "abc.c", "1");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.c", value3);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.c", "1");
 
 		EntityHelper.createEntity(facade, "abc", "d");
 		AttributeHelper.createOneAttribute(facade, "abc.d", null, "number",
 				AttributeType.INTEGER, "{\"minvalue\": 1, \"maxvalue\": 1}");
-		AttributeValue value4 = InstanceHelper.newAttributeValue(facade,
-				"number", "abc.d", "1");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.d", value4);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.d", "1");
 
 		EntityHelper.createEntity(facade, "abc", "e");
 		AttributeHelper.createOneAttribute(facade, "abc.e", null, "number",
 				AttributeType.INTEGER,
 				"{\"default\": 1, \"minvalue\": 1, \"maxvalue\": 1}");
-		AttributeValue value5 = InstanceHelper.newAttributeValue(facade,
-				"number", "abc.e", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.e", value5);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.e", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "f");
 		AttributeHelper
 				.createOneAttribute(facade, "abc.f", null, "number",
 						AttributeType.INTEGER,
 						"{\"mandatory\": true,\"default\": 1, \"minvalue\": 1, \"maxvalue\": 1}");
-		AttributeValue value6 = InstanceHelper.newAttributeValue(facade,
-				"number", "abc.f", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.f", value6);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.f", (String) null);
 	}
 
 	public void instanceWithValidValuesForTheConfigurationOfAttributesPassword() {
 		EntityHelper.createEntity(facade, "abc", "a");
 		AttributeHelper.createOneAttribute(facade, "abc.a", null, "secretKey",
 				AttributeType.PASSWORD, "{\"default\": \"password\"}");
-		AttributeValue value1 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.a", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a", value1);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.a", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "b");
 		AttributeHelper.createOneAttribute(facade, "abc.b", null, "secretKey",
 				AttributeType.PASSWORD, "{\"minUppers\": 2}");
-		AttributeValue value2 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.b", "SecretKey");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.b", value2);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.b", "SecretKey");
 
 		EntityHelper.createEntity(facade, "abc", "c");
 		AttributeHelper.createOneAttribute(facade, "abc.c", null, "secretKey",
 				AttributeType.PASSWORD, "{\"minNumbers\": 2}");
-		AttributeValue value3 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.c", "1secretkey2");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.c", value3);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.c", "1secretkey2");
 
 		EntityHelper.createEntity(facade, "abc", "d");
 		AttributeHelper.createOneAttribute(facade, "abc.d", null, "secretKey",
 				AttributeType.PASSWORD, "{\"minSymbols\": 2}");
-		AttributeValue value4 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.d", "&secretkey%");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.d", value4);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.d", "&secretkey%");
 
 		EntityHelper.createEntity(facade, "abc", "e");
 		AttributeHelper.createOneAttribute(facade, "abc.e", null, "secretKey",
 				AttributeType.PASSWORD, "{\"maxRepeat\": 2}");
-		AttributeValue value5 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.e", "seecretkey");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.e", value5);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.e", "seecretkey");
 
 		EntityHelper.createEntity(facade, "abc", "f");
 		AttributeHelper.createOneAttribute(facade, "abc.f", null, "secretKey",
 				AttributeType.PASSWORD, "{\"minlength\": 6}");
-		AttributeValue value6 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.f", "secret");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.f", value6);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.f", "secret");
 
 		EntityHelper.createEntity(facade, "abc", "g");
 		AttributeHelper.createOneAttribute(facade, "abc.g", null, "secretKey",
 				AttributeType.PASSWORD, "{\"maxlength\": 6}");
-		AttributeValue value7 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.g", "secret");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.g", value7);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.g", "secret");
 
 		EntityHelper.createEntity(facade, "abc", "h");
 		AttributeHelper.createOneAttribute(facade, "abc.h", null, "secretKey",
 				AttributeType.PASSWORD, "{\"mandatory\": true}");
-		AttributeValue value8 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.h", "secret");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.h", value8);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.h", "secret");
 
 		EntityHelper.createEntity(facade, "abc", "i");
 		AttributeHelper.createOneAttribute(facade, "abc.i", null, "secretKey",
 				AttributeType.PASSWORD, "{\"mandatory\": false}");
-		AttributeValue value9 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.i", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.h", value9);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.h", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "j");
 		AttributeHelper.createOneAttribute(facade, "abc.j", null, "secretKey",
 				AttributeType.PASSWORD,
 				"{\"mandatory\": true, \"default\": \"mypassword\"}");
-		AttributeValue value10 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.j", null);
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.j", value10);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.j", (String) null);
 
 		EntityHelper.createEntity(facade, "abc", "k");
 		AttributeHelper
@@ -463,9 +369,7 @@ public abstract class InstanceServiceTest {
 						"{\"mandatory\": true, \"default\": \"P@ssW04\", \"minlength\": 6, "
 								+ "\"maxlength\": 9, \"minUppers\": 2, \"minNumbers\": 2, "
 								+ "\"minSymbols\": 2, \"maxRepeat\": 2}");
-		AttributeValue value11 = InstanceHelper.newAttributeValue(facade,
-				"secretKey", "abc.k", "0tH3r@ss");
-		InstanceHelper.createAndVerifyOneInstance(facade, "abc.k", value11);
+		InstanceHelper.createAndVerifyOneInstance(facade, "abc.k", "0tH3r@ss");
 	}
 
 	@Test
@@ -476,35 +380,34 @@ public abstract class InstanceServiceTest {
 		AttributeHelper.createOneAttribute(facade, "abc.a", null, "name",
 				AttributeType.INTEGER, "");
 
-		AttributeValue value = InstanceHelper.newAttributeValue(facade, "name",
-				"abc.a", "false");
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade, "abc.a",
-				messageException, value);
+				messageException, "false");
 
-		value = InstanceHelper.newAttributeValue(facade, "name", "abc.a", "true");
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade, "abc.a",
-				messageException, value);
+				messageException, "true");
 
-		value = InstanceHelper.newAttributeValue(facade, "name", "abc.a", "pa");
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade, "abc.a",
-				messageException, value);
+				messageException, "pa");
 
-		value = InstanceHelper.newAttributeValue(facade, "name", "abc.a", "3.2");
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade, "abc.a",
-				messageException, value);
+				messageException, "3.2");
 
-		value = InstanceHelper.newAttributeValue(facade, "name", "abc.a", "0.75");
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade, "abc.a",
-				messageException, value);
+				messageException, "0.75");
 
-		value = InstanceHelper.newAttributeValue(facade, "name", "abc.a", "-3.2");
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade, "abc.a",
-				messageException, value);
+				messageException, "-3.2");
 	}
 
 	@Test
 	public void instanceWithInvalidValuesForConfigurationOfTextAttributes() {
 		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity(facade, "abc", "b");
+		EntityHelper.createEntity(facade, "abc", "ba");
+		EntityHelper.createEntity(facade, "abc", "c");
+		EntityHelper.createEntity(facade, "abc", "ca");
+		EntityHelper.createEntity(facade, "abc", "d");
+		EntityHelper.createEntity(facade, "abc", "da");
 
 		InstanceHelper
 				.invalidValueForInstance(
@@ -519,7 +422,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.b",
 						null,
 						"nameB",
 						AttributeType.TEXT,
@@ -529,7 +432,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.ba",
 						null,
 						"nameBA",
 						AttributeType.TEXT,
@@ -539,7 +442,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.c",
 						null,
 						"nameC",
 						AttributeType.TEXT,
@@ -549,7 +452,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.ca",
 						null,
 						"nameCA",
 						AttributeType.TEXT,
@@ -559,7 +462,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.d",
 						null,
 						"nameD",
 						AttributeType.TEXT,
@@ -569,7 +472,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.da",
 						null,
 						"nameDA",
 						AttributeType.TEXT,
@@ -599,8 +502,14 @@ public abstract class InstanceServiceTest {
 	}
 
 	@Test
-	public void instanceWithInvalidValuesForTheConfigurationOfAttributesLongText() {
+	public void instanceWithInvalidValuesForConfigurationOfLongTextAttributes() {
 		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity(facade, "abc", "b");
+		EntityHelper.createEntity(facade, "abc", "ba");
+		EntityHelper.createEntity(facade, "abc", "c");
+		EntityHelper.createEntity(facade, "abc", "ca");
+		EntityHelper.createEntity(facade, "abc", "d");
+		EntityHelper.createEntity(facade, "abc", "e");
 
 		InstanceHelper
 				.invalidValueForInstance(
@@ -615,7 +524,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.b",
 						null,
 						"nameB",
 						AttributeType.LONGTEXT,
@@ -625,7 +534,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.ba",
 						null,
 						"nameBA",
 						AttributeType.LONGTEXT,
@@ -635,7 +544,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.c",
 						null,
 						"nameC",
 						AttributeType.LONGTEXT,
@@ -645,7 +554,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.ca",
 						null,
 						"nameCA",
 						AttributeType.LONGTEXT,
@@ -655,7 +564,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.d",
 						null,
 						"nameD",
 						AttributeType.LONGTEXT,
@@ -665,7 +574,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.e",
 						null,
 						"nameE",
 						AttributeType.LONGTEXT,
@@ -675,8 +584,14 @@ public abstract class InstanceServiceTest {
 	}
 
 	@Test
-	public void instanceWithInvalidValuesForTheConfigurationOfAttributesInteger() {
+	public void instanceWithInvalidValuesForConfigurationOfIntegerAttributes() {
 		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity(facade, "abc", "b");
+		EntityHelper.createEntity(facade, "abc", "c");
+		EntityHelper.createEntity(facade, "abc", "d");
+		EntityHelper.createEntity(facade, "abc", "e");
+		EntityHelper.createEntity(facade, "abc", "f");
+		EntityHelper.createEntity(facade, "abc", "g");
 
 		InstanceHelper
 				.invalidValueForInstance(
@@ -691,7 +606,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.b",
 						null,
 						"nameB",
 						AttributeType.INTEGER,
@@ -701,7 +616,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.c",
 						null,
 						"nameC",
 						AttributeType.INTEGER,
@@ -711,7 +626,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.d",
 						null,
 						"nameD",
 						AttributeType.INTEGER,
@@ -721,7 +636,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.e",
 						null,
 						"nameE",
 						AttributeType.INTEGER,
@@ -731,7 +646,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.f",
 						null,
 						"nameF",
 						AttributeType.INTEGER,
@@ -741,7 +656,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.g",
 						null,
 						"nameG",
 						AttributeType.INTEGER,
@@ -753,6 +668,18 @@ public abstract class InstanceServiceTest {
 	@Test
 	public void instanceWithInvalidValuesForTheConfigurationOfAttributesPassword() {
 		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity(facade, "abc", "b");
+		EntityHelper.createEntity(facade, "abc", "ba");
+		EntityHelper.createEntity(facade, "abc", "c");
+		EntityHelper.createEntity(facade, "abc", "ca");
+		EntityHelper.createEntity(facade, "abc", "d");
+		EntityHelper.createEntity(facade, "abc", "da");
+		EntityHelper.createEntity(facade, "abc", "e");
+		EntityHelper.createEntity(facade, "abc", "f");
+		EntityHelper.createEntity(facade, "abc", "g");
+		EntityHelper.createEntity(facade, "abc", "h");
+		EntityHelper.createEntity(facade, "abc", "i");
+		EntityHelper.createEntity(facade, "abc", "j");
 
 		InstanceHelper
 				.invalidValueForInstance(
@@ -767,7 +694,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.b",
 						null,
 						"nameB",
 						AttributeType.PASSWORD,
@@ -777,7 +704,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.ba",
 						null,
 						"nameBA",
 						AttributeType.PASSWORD,
@@ -787,7 +714,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.c",
 						null,
 						"nameC",
 						AttributeType.PASSWORD,
@@ -797,7 +724,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.ca",
 						null,
 						"nameCA",
 						AttributeType.PASSWORD,
@@ -807,7 +734,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.d",
 						null,
 						"nameD",
 						AttributeType.PASSWORD,
@@ -817,7 +744,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.da",
 						null,
 						"nameDA",
 						AttributeType.PASSWORD,
@@ -827,7 +754,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.e",
 						null,
 						"nameE",
 						AttributeType.PASSWORD,
@@ -837,7 +764,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.f",
 						null,
 						"nameF",
 						AttributeType.PASSWORD,
@@ -847,7 +774,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.g",
 						null,
 						"nameG",
 						AttributeType.PASSWORD,
@@ -857,7 +784,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.h",
 						null,
 						"nameH",
 						AttributeType.PASSWORD,
@@ -867,7 +794,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.i",
 						null,
 						"nameI",
 						AttributeType.PASSWORD,
@@ -877,7 +804,7 @@ public abstract class InstanceServiceTest {
 		InstanceHelper
 				.invalidValueForInstance(
 						facade,
-						"abc.a",
+						"abc.j",
 						null,
 						"nameJ",
 						AttributeType.PASSWORD,

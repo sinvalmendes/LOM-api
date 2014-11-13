@@ -17,7 +17,7 @@ import com.nanuvem.lom.api.util.JsonNodeUtil;
 public class InstanceHelper {
 
 	public static Instance createOneInstance(Facade facade,
-			String entityFullName, AttributeValue... values) {
+			String entityFullName, String... values) {
 
 		Entity entity = null;
 		if (entityFullName != null) {
@@ -27,16 +27,23 @@ public class InstanceHelper {
 		Instance instance = new Instance();
 		instance.setEntity(entity);
 
-		for (AttributeValue value : values) {
-			value.setInstance(instance);
-			instance.getValues().add(value);
+		for (int i = 0; i < values.length; i++) {
+			AttributeValue attributeValue = new AttributeValue();
+			attributeValue.setValue(values[i]);
+			
+			if (entity != null) {
+				attributeValue.setAttribute(entity.getAttributes().get(i));
+			}
+			
+			attributeValue.setInstance(instance);
+			instance.getValues().add(attributeValue);
 		}
 		return facade.create(instance);
 	}
 
 	public static void expectExceptionOnCreateInvalidInstance(Facade facade,
 			String entityFullName, String exceptedMessage,
-			AttributeValue... values) {
+			String... values) {
 
 		try {
 			createOneInstance(facade, entityFullName, values);
@@ -47,7 +54,7 @@ public class InstanceHelper {
 	}
 
 	public static void createAndVerifyOneInstance(Facade facade,
-			String entityFullName, AttributeValue... values) {
+			String entityFullName, String... values) {
 
 		Instance createdInstance = createOneInstance(facade, entityFullName,
 				values);
@@ -63,44 +70,28 @@ public class InstanceHelper {
 	}
 
 	private static void verifyAllAttributesValues(Instance createdInstance,
-			AttributeValue... values) {
+			String... values) {
 
-		boolean wereAllAttributeValuesValidated = true;
+		for (int i = 0; i < values.length; i++) {
+			String value = values[i];
+			AttributeValue createdValue = createdInstance.getValues().get(i);
 
-		for (AttributeValue attributeValue : values) {
-			boolean valueParameterOfTheInteractionWasValidated = false;
-			for (AttributeValue createdValue : createdInstance.getValues()) {
-				Assert.assertNotNull("Id was null", createdValue.getId());
-				try {
-					if (existsDefaultConfiguration(attributeValue)) {
-
-						valueParameterOfTheInteractionWasValidated = validateThatDefaultConfigurationWasAppliedToValue(createdValue);
-						break;
-
-					} else {
-						valueParameterOfTheInteractionWasValidated = createdValue
-								.equals(attributeValue);
-						break;
-					}
-
-				} catch (Exception e) {
-					fail();
-				}
-				wereAllAttributeValuesValidated = wereAllAttributeValuesValidated
-						&& valueParameterOfTheInteractionWasValidated;
+			Assert.assertNotNull("Id was null", createdValue.getId());
+			
+			if (usesDefaultConfiguration(value, createdValue)) {
+				validateThatDefaultConfigurationWasAppliedToValue(createdValue);
+			} else {
+				Assert.assertEquals(value, createdValue.getValue());
 			}
-
 		}
-		Assert.assertTrue("There has been no validated AttributeValue",
-				wereAllAttributeValuesValidated);
 	}
 
-	private static boolean existsDefaultConfiguration(
-			AttributeValue attributeValue) {
+	private static boolean usesDefaultConfiguration(
+			String value, AttributeValue createdValue) {
 
-		return (attributeValue.getValue() == null)
-				&& (attributeValue.getAttribute().getConfiguration() != null)
-				&& (attributeValue.getAttribute().getConfiguration()
+		return ((value == null) || value.isEmpty())
+				&& (createdValue.getAttribute().getConfiguration() != null)
+				&& (createdValue.getAttribute().getConfiguration()
 						.contains(Attribute.DEFAULT_CONFIGURATION_NAME));
 	}
 
@@ -115,7 +106,7 @@ public class InstanceHelper {
 		return attributeValue;
 	}
 
-	private static boolean validateThatDefaultConfigurationWasAppliedToValue(
+	private static void validateThatDefaultConfigurationWasAppliedToValue(
 			AttributeValue attributeValue) {
 		JsonNode jsonNode = null;
 		try {
@@ -128,7 +119,7 @@ public class InstanceHelper {
 		}
 		String defaultField = jsonNode
 				.get(Attribute.DEFAULT_CONFIGURATION_NAME).asText();
-		return attributeValue.getValue().equals(defaultField);
+		Assert.assertEquals(attributeValue.getValue(), defaultField);
 	}
 
 	static AttributeValue attributeValue(String attributeName, String objValue) {
@@ -148,11 +139,8 @@ public class InstanceHelper {
 		AttributeHelper.createOneAttribute(facade, entityName, sequence,
 				attributeName, type, configuration);
 
-		AttributeValue attributeValue = InstanceHelper.newAttributeValue(
-				facade, attributeName, entityName, value);
-
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade,
-				entityName, expectedMessage, attributeValue);
+				entityName, expectedMessage, value);
 
 	}
 }
