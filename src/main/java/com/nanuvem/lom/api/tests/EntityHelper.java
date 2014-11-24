@@ -12,7 +12,9 @@ import com.nanuvem.lom.api.MetadataException;
 
 public class EntityHelper {
 
-	static Entity createEntity(Facade facade, String namespace, String name) {
+	private static Facade facade;
+
+	static Entity createEntity(String namespace, String name) {
 		Entity entity = new Entity();
 		entity.setName(name);
 		entity.setNamespace(namespace);
@@ -20,7 +22,7 @@ public class EntityHelper {
 		return entity;
 	}
 
-	static void expectExceptionOnInvalidFindEntityByFullName(Facade facade, String fullName,
+	static void expectExceptionOnInvalidFindEntityByFullName(String fullName,
 			String expectedMessage) {
 		try {
 			facade.findEntityByFullName(fullName);
@@ -30,93 +32,44 @@ public class EntityHelper {
 		}
 	}
 
-	static void expectExceptionOnInvalidEntityList(Facade facade, String fragment,
-			String expectedMessage) {
+	static void expectExceptionOnInvalidEntityList(String fragment,
+			String expectedMessage, String... args) {
 		try {
 			facade.listEntitiesByFullName(fragment);
 			fail();
-		} catch (MetadataException me) {
-			Assert.assertEquals(expectedMessage, me.getMessage());
-		}
-	}
-
-	static void expectExceptionOnInvalidEntityUpdate(Facade facade, 
-			String firstentitynamespace, String firstentityname,
-			String secondentitynamespace, String secondentityname,
-			String firstentitynamespaceupdate, String firstentitynameupdate,
-			String expectedExceptionMessage) {
-	
-		Entity ea = new Entity();
-		ea.setNamespace(firstentitynamespace);
-		ea.setName(firstentityname);
-		ea = facade.create(ea);
-	
-		Entity eb = new Entity();
-		eb.setNamespace(secondentitynamespace);
-		eb.setName(secondentityname);
-		eb = facade.create(eb);
-	
-		try {
-			ea.setName(firstentitynameupdate);
-			ea.setNamespace(firstentitynamespaceupdate);
-			facade.update(ea);
-			fail();
-		} catch (MetadataException me) {
-			Assert.assertEquals(expectedExceptionMessage, me.getMessage());
-			facade.deleteEntity(ea.getId());
-			facade.deleteEntity(eb.getId());
-		}
-	}
-
-	static void expectExceptionOnInvalidEntityUpdateUsingId(Facade facade, String namespace,
-			String name, Long id, Integer version, String expectedMessage) {
-		Entity updateEntity = new Entity();
-		updateEntity.setNamespace(namespace);
-		updateEntity.setName(name);
-		updateEntity.setId(id);
-		updateEntity.setVersion(version);
-		try {
-			facade.update(updateEntity);
-			fail();
-		} catch (MetadataException me) {
-			Assert.assertEquals(expectedMessage, me.getMessage());
-		}
-	}
-
-	static void expectExceptionOnInvalidEntityUpdate(Facade facade, String firstnamespace,
-			String firstname, String secondnamespace, String secondname,
-			String expectedMessage) {
-		Entity entity = new Entity();
-		entity.setNamespace(firstnamespace);
-		entity.setName(firstname);
-		try {
-			entity = facade.create(entity);
 		} catch (MetadataException e) {
-			fail(e.getMessage());
+            String formatedMessage = String.format(expectedMessage, (Object[])  args);
+            Assert.assertEquals(formatedMessage, e.getMessage());
 		}
+	}
+
+	static void expectExceptionOnInvalidEntityUpdate(Entity entity, String secondnamespace, String secondname,
+			String expectedMessage, String... args) {
 	
 		try {
 			entity.setNamespace(secondnamespace);
 			entity.setName(secondname);
 			facade.update(entity);
 			fail();
-		} catch (MetadataException me) {
-			Assert.assertEquals(expectedMessage, me.getMessage());
+		} catch (MetadataException e) {
+            String formatedMessage = String.format(expectedMessage, (Object[])  args);
+            Assert.assertEquals(formatedMessage, e.getMessage());
 		}
 	}
 
-	static void expectExceptionOnCreateInvalidEntity(Facade facade, String namespace,
-			String name, String expectedMessage) {
+	static void expectExceptionOnCreateInvalidEntity(String namespace,
+			String name, String expectedMessage, String... args) {
 		try {
-			EntityHelper.createAndVerifyOneEntity(facade, namespace, name);
+			createAndVerifyOneEntity(namespace, name);
 			fail();
 		} catch (MetadataException e) {
-			Assert.assertEquals(expectedMessage, e.getMessage());
+			String formatedMessage = String.format(expectedMessage, (Object[])  args);
+			Assert.assertEquals(formatedMessage, e.getMessage());
 		}
 	}
 
-	static void createUpdateAndVerifyOneEntity(Facade facade, String firstNamespace,
-			String firstName, String updatePath, String secondNamespace,
+	static void createUpdateAndVerifyOneEntity(String firstNamespace,
+			String firstName, String secondNamespace,
 			String secondName) {
 	
 		Entity entity = new Entity();
@@ -141,10 +94,9 @@ public class EntityHelper {
 		Assert.assertEquals((Integer) 1, entity1.getVersion());
 		Assert.assertNotSame(entity, entityFound);
 		facade.deleteEntity(entity.getId());
-		facade.deleteEntity(entity1.getId());
 	}
 
-	static void createAndVerifyTwoEntities(Facade facade, String entity1namespace,
+	static void createAndVerifyTwoEntities(String entity1namespace,
 			String entity1name, String entity2namespace, String entity2name) {
 		Entity entity1 = new Entity();
 		entity1.setNamespace(entity1namespace);
@@ -171,7 +123,7 @@ public class EntityHelper {
 		facade.deleteEntity(entity2.getId());
 	}
 
-	static Entity createAndSaveOneEntity(Facade facade, String namespace, String name) {
+	static Entity createAndSaveOneEntity(String namespace, String name) {
 		Entity entity = new Entity();
 		entity.setNamespace(namespace);
 		entity.setName(name);
@@ -182,7 +134,7 @@ public class EntityHelper {
 		return entity;
 	}
 
-	static void createAndVerifyOneEntity(Facade facade, String namespace, String name) {
+	static void createAndVerifyOneEntity(String namespace, String name) {
 		Entity entity = new Entity();
 		entity.setNamespace(namespace);
 		entity.setName(name);
@@ -196,6 +148,10 @@ public class EntityHelper {
 		Assert.assertEquals(entity, entities.get(0));
 	
 		facade.deleteEntity(entity.getId());
+	}
+
+	public static void setFacade(Facade facade) {
+		EntityHelper.facade = facade;
 	}
 
 }

@@ -20,30 +20,31 @@ public abstract class CreateAttributeServiceTest {
 	@Before
 	public void init() {
 		facade = createFacade();
+		EntityHelper.setFacade(facade);
 	}
 
 	@Test
 	public void validAttributeData() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		createAndVerifyOneAttribute(facade, "abc.a", 1, "pa",
 				AttributeType.TEXT, "{\"mandatory\":true}");
 
-		EntityHelper.createEntity(facade, "abc", "b");
+		EntityHelper.createEntity("abc", "b");
 		createAndVerifyOneAttribute(facade, "abc.b", 1, "pe",
 				AttributeType.LONGTEXT, "{\"mandatory\":false}");
 
-		EntityHelper.createEntity(facade, "abc", "c");
+		EntityHelper.createEntity("abc", "c");
 		createAndVerifyOneAttribute(facade, "abc.c", 1, "pa",
 				AttributeType.TEXT, "");
 
-		EntityHelper.createEntity(facade, "abc", "d");
+		EntityHelper.createEntity("abc", "d");
 		createAndVerifyOneAttribute(facade, "abc.d", 1, "pa",
 				AttributeType.TEXT, null);
 	}
 
 	@Test
 	public void invalidAttributeData() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		expectExceptionOnCreateInvalidAttribute(facade, "abc.a", 0, "pa",
 				AttributeType.TEXT, "{\"mandatory\":true}",
 				"Invalid value for Attribute sequence: 0");
@@ -76,7 +77,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void invalidAttributeName() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		expectExceptionOnCreateInvalidAttribute(facade, "abc.a", 1, "aaa$",
 				AttributeType.TEXT, "{\"mandatory\":true}",
@@ -105,7 +106,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void validateSeveralAttributesInTheSameEntity() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		createAndVerifyOneAttribute(facade, "abc.a", null, "pa",
 				AttributeType.TEXT, "");
@@ -119,7 +120,7 @@ public abstract class CreateAttributeServiceTest {
 				.findAttributeByNameAndEntityFullName("pb", "abc.a")
 				.getSequence());
 
-		EntityHelper.createEntity(facade, "", "b");
+		EntityHelper.createEntity("", "b");
 
 		createAndVerifyOneAttribute(facade, "b", new Integer(1), "pa",
 				AttributeType.LONGTEXT, "");
@@ -130,7 +131,7 @@ public abstract class CreateAttributeServiceTest {
 		Assert.assertEquals(new Integer(1), this.facade
 				.findAttributeByNameAndEntityFullName("pb", "b").getSequence());
 
-		EntityHelper.createEntity(facade, "", "c");
+		EntityHelper.createEntity("", "c");
 
 		createAndVerifyOneAttribute(facade, "c", new Integer(1), "pa",
 				AttributeType.TEXT, "");
@@ -148,7 +149,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void validateAttributeDuplicationInTheSameEntity() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		createAndVerifyOneAttribute(facade, "abc.a", null, "pa",
 				AttributeType.TEXT, "");
 
@@ -171,7 +172,7 @@ public abstract class CreateAttributeServiceTest {
 		expectExceptionOnCreateInvalidAttribute(facade, "a", null, "abc123",
 				AttributeType.TEXT, "", "Entity not found: a");
 
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		expectExceptionOnCreateInvalidAttribute(facade, "abca", null, "abc123",
 				AttributeType.TEXT, "", "Entity not found: abca");
@@ -180,7 +181,7 @@ public abstract class CreateAttributeServiceTest {
 		expectExceptionOnCreateInvalidAttribute(facade, "abc.b", null,
 				"abc123", AttributeType.TEXT, "", "Entity not found: abc.b");
 
-		EntityHelper.createEntity(facade, "", "b");
+		EntityHelper.createEntity("", "b");
 
 		expectExceptionOnCreateInvalidAttribute(facade, "a", null, "abc123",
 				null, "", "Entity not found: a");
@@ -190,7 +191,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void validateConfigurationForTextAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		createAndVerifyOneAttribute(facade, "abc.a", 1, "pa",
 				AttributeType.TEXT,
@@ -231,7 +232,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void invalidConfigurationForTextAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		expectExceptionOnCreateInvalidAttribute(
 				facade,
@@ -356,7 +357,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void validConfigurationForLongTextAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		createAndVerifyOneAttribute(facade, "abc.a", 1, "p1",
 				AttributeType.LONGTEXT, "{\"minlength\":10}");
@@ -379,7 +380,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void invalidConfigurationForLongTextAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		AttributeHelper
 				.expectExceptionOnCreateInvalidAttribute(facade, "abc.a", 1,
@@ -469,7 +470,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void validConfigurationForPasswordAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		createAndVerifyOneAttribute(facade, "abc.a", 1, "pa",
 				AttributeType.PASSWORD, "{\"minlength\":10}");
@@ -534,7 +535,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void invalidConfigurationForPasswordAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		AttributeHelper
 				.expectExceptionOnCreateInvalidAttribute(facade, "abc.a", 1,
@@ -818,7 +819,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void validConfigurationForIntegerAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		createAndVerifyOneAttribute(facade, "abc.a", 1, "p1",
 				AttributeType.INTEGER, "{\"minvalue\":-5}");
@@ -837,7 +838,7 @@ public abstract class CreateAttributeServiceTest {
 
 	@Test
 	public void invalidConfigurationForIntegerAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		expectExceptionOnCreateInvalidAttribute(
 				facade,
@@ -919,7 +920,7 @@ public abstract class CreateAttributeServiceTest {
 	@Test
 	@Ignore
 	public void validConfigurationForObjectAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		createAndVerifyOneAttribute(facade, "abc.a", 1, "pa",
 				AttributeType.OBJECT, "{\"schema\":OBJECT WITH ONE ATTRIBUTE}");
@@ -971,7 +972,7 @@ public abstract class CreateAttributeServiceTest {
 	@Test
 	@Ignore
 	public void invalidConfigurationForObjectAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		AttributeHelper
 				.expectExceptionOnCreateInvalidAttribute(facade, "abc.a", null,

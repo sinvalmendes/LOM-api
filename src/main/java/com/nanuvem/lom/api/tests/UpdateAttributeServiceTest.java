@@ -45,11 +45,12 @@ public abstract class UpdateAttributeServiceTest {
 	@Before
 	public void init() {
 		facade = createFacade();
+		EntityHelper.setFacade(facade);
 	}
 
 	@Test
 	public void validNewName() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		Attribute createdAttribute = createOneAttribute(facade,
 				"abc.a", null, "pa", LONGTEXT, null);
 
@@ -60,7 +61,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void invalidNewName() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		Attribute createdAttribute = createOneAttribute(facade,
 				"abc.a", null, "pa", LONGTEXT, null);
 		expectExceptionOnUpdateWithInvalidNewName(createdAttribute, "",
@@ -89,7 +90,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void validNewSequence() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		Attribute createdAttribute1 = createOneAttribute(facade,
 				"abc.a", null, "pa", TEXT, null);
 		Attribute createdAttribute2 = createOneAttribute(facade,
@@ -110,7 +111,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void invalidNewSequence() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		Attribute createdAttribute = createOneAttribute(facade,
 				"abc.a", null, "pa", TEXT, null);
@@ -133,7 +134,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void changeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		Attribute createdAttribute = createOneAttribute(facade,
 				"abc.a", null, "pa", TEXT, null);
 
@@ -147,8 +148,8 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void renamingConflicts() {
-		EntityHelper.createEntity(facade, "abc", "a");
-		EntityHelper.createEntity(facade, "abc", "b");
+		EntityHelper.createEntity("abc", "a");
+		EntityHelper.createEntity("abc", "b");
 
 		createOneAttribute(facade, "abc.a", null, "pa", TEXT, null);
 
@@ -176,7 +177,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void genericChangeConfiguration() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		Attribute createdAttribute1 = createOneAttribute(facade,
 				"abc.a", null, "pa", TEXT, CONFIGURATION_MANDATORY_TRUE);
@@ -201,7 +202,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void validChangeConfigurationForTextAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		Attribute createdAttribute1 = createOneAttribute(facade,
 				"abc.a", null, "pa", TEXT, CONFIGURATION_MANDATORY_TRUE);
@@ -241,7 +242,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void invalidChangeConfigurationForTextAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		Attribute createdAttribute = createOneAttribute(facade,
 				"abc.a", null, "pa", TEXT, null);
 
@@ -363,7 +364,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void validChangeConfigurationForLongTextAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		Attribute createdAttribute1 = createOneAttribute(facade,
 				"abc.a", null, "pa", LONGTEXT, CONFIGURATION_MANDATORY_TRUE);
@@ -404,7 +405,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void invalidChangeConfigurationForLongTextAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		Attribute createdAttribute = createOneAttribute(facade,
 				"abc.a", null, "pa", LONGTEXT, null);
 
@@ -514,7 +515,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void validChangeConfigurationForPasswordAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 
 		Attribute createdAttribute1 = createOneAttribute(facade,
 				"abc.a", null, "pa", PASSWORD, CONFIGURATION_MANDATORY_TRUE);
@@ -554,7 +555,7 @@ public abstract class UpdateAttributeServiceTest {
 
 	@Test
 	public void invalidChangeConfigurationForPaswordAttributeType() {
-		EntityHelper.createEntity(facade, "abc", "a");
+		EntityHelper.createEntity("abc", "a");
 		Attribute createdAttribute = createOneAttribute(facade,
 				"abc.a", null, "pa", PASSWORD, null);
 
