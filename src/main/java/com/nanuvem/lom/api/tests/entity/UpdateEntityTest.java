@@ -1,15 +1,16 @@
-package com.nanuvem.lom.api.tests;
+package com.nanuvem.lom.api.tests.entity;
 
-import static com.nanuvem.lom.api.tests.EntityHelper.createAndSaveOneEntity;
-import static com.nanuvem.lom.api.tests.EntityHelper.createUpdateAndVerifyOneEntity;
-import static com.nanuvem.lom.api.tests.EntityHelper.expectExceptionOnInvalidEntityUpdate;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.createAndSaveOneEntity;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.createUpdateAndVerifyOneEntity;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.expectExceptionOnInvalidEntityUpdate;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.tests.LomTestCase;
 
-public abstract class UpdateEntityServiceTest extends LomTestCase {
+public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void validNewNameAndPackage() {
@@ -38,7 +39,7 @@ public abstract class UpdateEntityServiceTest extends LomTestCase {
     @Test
     public void renameCausingTwoEntitiesWithSameNameInDifferentPackages() {
         Entity ea = createAndSaveOneEntity("a", "aaa");
-        createAndSaveOneEntity("b", "bbb");// TODO Pre-condition
+        createAndSaveOneEntity("b", "bbb");
 
         ea.setName("bbb");
         facade.update(ea);
@@ -47,7 +48,7 @@ public abstract class UpdateEntityServiceTest extends LomTestCase {
     @Test
     public void moveCausingTwoEntitiesWithSameNameInDifferentPackages() {
         Entity ea = createAndSaveOneEntity("a", "aaa");
-        createAndSaveOneEntity("b", "bbb");// TODO Pre-condition
+        createAndSaveOneEntity("b", "bbb");
 
         ea.setNamespace("c");
         ea.setName("bbb");
@@ -76,7 +77,7 @@ public abstract class UpdateEntityServiceTest extends LomTestCase {
         Entity ea = createAndSaveOneEntity("a", "aaa");
         createAndSaveOneEntity("b", "bbb");
         createAndSaveOneEntity("b", "aaa");
-        createAndSaveOneEntity("a", "bbb"); // TODO Pre-condition
+        createAndSaveOneEntity("a", "bbb"); 
 
         expectExceptionOnInvalidEntityUpdate(ea, "b", "bbb", ENTITY_ALREADY_EXISTS, "b.bbb");
         expectExceptionOnInvalidEntityUpdate(ea, "b", "aaa", ENTITY_ALREADY_EXISTS, "b.aaa");
@@ -85,7 +86,7 @@ public abstract class UpdateEntityServiceTest extends LomTestCase {
         Entity e1 = createAndSaveOneEntity("a.b.c", "aaa");
         Entity e2 = createAndSaveOneEntity("b.c", "aaa");
         Entity e3 = createAndSaveOneEntity("a.b.c", "bbb");
-        createAndSaveOneEntity("b.c", "bbb"); // TODO Pre-condition
+        createAndSaveOneEntity("b.c", "bbb"); 
 
         expectExceptionOnInvalidEntityUpdate(e1, "b.c", "bbb", ENTITY_ALREADY_EXISTS, "b.c.bbb");
         expectExceptionOnInvalidEntityUpdate(e2, "b.c", "bbb", ENTITY_ALREADY_EXISTS, "b.c.bbb");
@@ -97,7 +98,7 @@ public abstract class UpdateEntityServiceTest extends LomTestCase {
         Entity ea1 = createAndSaveOneEntity("a", "aaa");
         Entity ea2 = createAndSaveOneEntity(null, "aaa");
         Entity ea3 = createAndSaveOneEntity("a", "bbb");
-        createAndSaveOneEntity(null, "bbb"); // TODO Pre-condition
+        createAndSaveOneEntity(null, "bbb"); 
 
         expectExceptionOnInvalidEntityUpdate(ea1, null, "bbb", ENTITY_ALREADY_EXISTS, "bbb");
         expectExceptionOnInvalidEntityUpdate(ea2, null, "bbb", ENTITY_ALREADY_EXISTS, "bbb");
@@ -106,7 +107,7 @@ public abstract class UpdateEntityServiceTest extends LomTestCase {
         Entity ec1 = createAndSaveOneEntity("a.b.c", "ccc");
         Entity ec2 = createAndSaveOneEntity("", "ccc");
         Entity ec3 = createAndSaveOneEntity("a.b.c", "ddd");
-        createAndSaveOneEntity("", "ddd"); // TODO Pre-condition
+        createAndSaveOneEntity("", "ddd"); 
 
         expectExceptionOnInvalidEntityUpdate(ec1, "", "ddd", ENTITY_ALREADY_EXISTS, "ddd");
         expectExceptionOnInvalidEntityUpdate(ec2, "", "ddd", ENTITY_ALREADY_EXISTS, "ddd");
@@ -138,7 +139,7 @@ public abstract class UpdateEntityServiceTest extends LomTestCase {
         Entity ea = createAndSaveOneEntity("a", "aaa");
         createAndSaveOneEntity("b", "bbb");
         createAndSaveOneEntity("CcC", "ccc");
-        createAndSaveOneEntity("DDD", "ddd"); // TODO Pre-condition
+        createAndSaveOneEntity("DDD", "ddd"); 
 
         expectExceptionOnInvalidEntityUpdate(ea, "b", "BbB", ENTITY_ALREADY_EXISTS, "b.bbb");
         expectExceptionOnInvalidEntityUpdate(ea, "b", "BBB", ENTITY_ALREADY_EXISTS, "b.bbb");
@@ -150,7 +151,7 @@ public abstract class UpdateEntityServiceTest extends LomTestCase {
 
     @Test
     public void invalidIdAndVersion() {
-        Entity ea = createAndSaveOneEntity("a", "aaa"); // TODO Pre-condition
+        Entity ea = createAndSaveOneEntity("a", "aaa"); 
         Long originalId = ea.getId();
         Integer originalVersion = ea.getVersion();
 
@@ -178,7 +179,7 @@ public abstract class UpdateEntityServiceTest extends LomTestCase {
 
     @Test
     public void severalUpdates() {
-        Entity ea = createAndSaveOneEntity("a", "aaa"); // TODO Pre-condition
+        Entity ea = createAndSaveOneEntity("a", "aaa"); 
 
         ea.setNamespace("b");
         ea.setName("abc");

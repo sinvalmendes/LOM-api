@@ -1,8 +1,8 @@
-package com.nanuvem.lom.api.tests;
+package com.nanuvem.lom.api.tests.entity;
 
-import static com.nanuvem.lom.api.tests.EntityHelper.createAndSaveOneEntity;
-import static com.nanuvem.lom.api.tests.EntityHelper.createEntity;
-import static com.nanuvem.lom.api.tests.EntityHelper.expectExceptionOnInvalidEntityList;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.createAndSaveOneEntity;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.createEntity;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.expectExceptionOnInvalidEntityList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.tests.LomTestCase;
 
-public abstract class ReadEntityServiceTest extends LomTestCase {
+public abstract class ReadEntityTest extends LomTestCase {
 
 
     @Test

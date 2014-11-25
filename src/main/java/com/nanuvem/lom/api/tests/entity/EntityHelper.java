@@ -1,4 +1,4 @@
-package com.nanuvem.lom.api.tests;
+package com.nanuvem.lom.api.tests.entity;
 
 import static org.junit.Assert.fail;
 
@@ -14,7 +14,7 @@ public class EntityHelper {
 
 	private static Facade facade;
 
-	static Entity createEntity(String namespace, String name) {
+	public static Entity createEntity(String namespace, String name) {
 		Entity entity = new Entity();
 		entity.setName(name);
 		entity.setNamespace(namespace);
@@ -22,7 +22,7 @@ public class EntityHelper {
 		return entity;
 	}
 
-	static void expectExceptionOnInvalidFindEntityByFullName(String fullName,
+	public static void expectExceptionOnInvalidFindEntityByFullName(String fullName,
 			String expectedMessage) {
 		try {
 			facade.findEntityByFullName(fullName);
@@ -32,7 +32,7 @@ public class EntityHelper {
 		}
 	}
 
-	static void expectExceptionOnInvalidEntityList(String fragment,
+	public static void expectExceptionOnInvalidEntityList(String fragment,
 			String expectedMessage, String... args) {
 		try {
 			facade.listEntitiesByFullName(fragment);
@@ -43,7 +43,7 @@ public class EntityHelper {
 		}
 	}
 
-	static void expectExceptionOnInvalidEntityUpdate(Entity entity, String secondnamespace, String secondname,
+	public static void expectExceptionOnInvalidEntityUpdate(Entity entity, String secondnamespace, String secondname,
 			String expectedMessage, String... args) {
 	
 		try {
@@ -57,7 +57,7 @@ public class EntityHelper {
 		}
 	}
 
-	static void expectExceptionOnCreateInvalidEntity(String namespace,
+	public static void expectExceptionOnCreateInvalidEntity(String namespace,
 			String name, String expectedMessage, String... args) {
 		try {
 			createAndVerifyOneEntity(namespace, name);
@@ -68,7 +68,7 @@ public class EntityHelper {
 		}
 	}
 
-	static void createUpdateAndVerifyOneEntity(String firstNamespace,
+	public static void createUpdateAndVerifyOneEntity(String firstNamespace,
 			String firstName, String secondNamespace,
 			String secondName) {
 	
@@ -96,7 +96,7 @@ public class EntityHelper {
 		facade.deleteEntity(entity.getId());
 	}
 
-	static void createAndVerifyTwoEntities(String entity1namespace,
+	public static void createAndVerifyTwoEntities(String entity1namespace,
 			String entity1name, String entity2namespace, String entity2name) {
 		Entity entity1 = new Entity();
 		entity1.setNamespace(entity1namespace);
@@ -123,7 +123,7 @@ public class EntityHelper {
 		facade.deleteEntity(entity2.getId());
 	}
 
-	static Entity createAndSaveOneEntity(String namespace, String name) {
+	public static Entity createAndSaveOneEntity(String namespace, String name) {
 		Entity entity = new Entity();
 		entity.setNamespace(namespace);
 		entity.setName(name);
@@ -134,7 +134,7 @@ public class EntityHelper {
 		return entity;
 	}
 
-	static void createAndVerifyOneEntity(String namespace, String name) {
+	public static void createAndVerifyOneEntity(String namespace, String name) {
 		Entity entity = new Entity();
 		entity.setNamespace(namespace);
 		entity.setName(name);

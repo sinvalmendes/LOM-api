@@ -1,13 +1,15 @@
-package com.nanuvem.lom.api.tests;
+package com.nanuvem.lom.api.tests.entity;
 
-import static com.nanuvem.lom.api.tests.EntityHelper.createAndSaveOneEntity;
-import static com.nanuvem.lom.api.tests.EntityHelper.createAndVerifyOneEntity;
-import static com.nanuvem.lom.api.tests.EntityHelper.createAndVerifyTwoEntities;
-import static com.nanuvem.lom.api.tests.EntityHelper.expectExceptionOnCreateInvalidEntity;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.createAndSaveOneEntity;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.createAndVerifyOneEntity;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.createAndVerifyTwoEntities;
+import static com.nanuvem.lom.api.tests.entity.EntityHelper.expectExceptionOnCreateInvalidEntity;
 
 import org.junit.Test;
 
-public abstract class CreateEntityServiceTest extends LomTestCase {
+import com.nanuvem.lom.api.tests.LomTestCase;
+
+public abstract class CreateEntityTest extends LomTestCase {
 
     @Test
     public void validNameAndNamespace() {

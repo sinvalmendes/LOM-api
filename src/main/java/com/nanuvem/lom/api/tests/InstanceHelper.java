@@ -12,6 +12,7 @@ import com.nanuvem.lom.api.Entity;
 import com.nanuvem.lom.api.Facade;
 import com.nanuvem.lom.api.Instance;
 import com.nanuvem.lom.api.MetadataException;
+import com.nanuvem.lom.api.tests.attribute.AttributeHelper;
 import com.nanuvem.lom.api.util.JsonNodeUtil;
 
 public class InstanceHelper {
@@ -136,8 +137,8 @@ public class InstanceHelper {
 			AttributeType type, String configuration, String value,
 			String expectedMessage) {
 
-		AttributeHelper.createOneAttribute(facade, entityName, sequence,
-				attributeName, type, configuration);
+		AttributeHelper.createOneAttribute(entityName, sequence, attributeName,
+				type, configuration);
 
 		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade,
 				entityName, expectedMessage, value);
