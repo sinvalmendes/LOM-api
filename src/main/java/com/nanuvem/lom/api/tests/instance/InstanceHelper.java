@@ -1,4 +1,4 @@
-package com.nanuvem.lom.api.tests;
+package com.nanuvem.lom.api.tests.instance;
 
 import static org.junit.Assert.fail;
 import junit.framework.Assert;
@@ -17,8 +17,14 @@ import com.nanuvem.lom.api.util.JsonNodeUtil;
 
 public class InstanceHelper {
 
-	public static Instance createOneInstance(Facade facade,
-			String entityFullName, String... values) {
+	private static Facade facade;
+	
+    public static void setFacade(Facade facade) {
+        InstanceHelper.facade = facade;
+    }
+
+    public static Instance createOneInstance(String entityFullName,
+			String... values) {
 
 		Entity entity = null;
 		if (entityFullName != null) {
@@ -42,23 +48,21 @@ public class InstanceHelper {
 		return facade.create(instance);
 	}
 
-	public static void expectExceptionOnCreateInvalidInstance(Facade facade,
-			String entityFullName, String exceptedMessage,
-			String... values) {
+	public static void expectExceptionOnCreateInvalidInstance(String entityFullName,
+			String exceptedMessage, String... values) {
 
 		try {
-			createOneInstance(facade, entityFullName, values);
+			createOneInstance(entityFullName, values);
 			fail();
 		} catch (MetadataException metadataException) {
 			Assert.assertEquals(exceptedMessage, metadataException.getMessage());
 		}
 	}
 
-	public static void createAndVerifyOneInstance(Facade facade,
-			String entityFullName, String... values) {
+	public static void createAndVerifyOneInstance(String entityFullName,
+			String... values) {
 
-		Instance createdInstance = createOneInstance(facade, entityFullName,
-				values);
+		Instance createdInstance = createOneInstance(entityFullName, values);
 
 		Assert.assertNotNull(createdInstance.getId());
 		Assert.assertEquals(new Integer(0), createdInstance.getVersion());
@@ -96,8 +100,8 @@ public class InstanceHelper {
 						.contains(Attribute.DEFAULT_CONFIGURATION_NAME));
 	}
 
-	public static AttributeValue newAttributeValue(Facade facade,
-			String attributeName, String entityFullName, String value) {
+	public static AttributeValue newAttributeValue(String attributeName,
+			String entityFullName, String value) {
 
 		AttributeValue attributeValue = new AttributeValue();
 		attributeValue.setAttribute(facade
@@ -132,16 +136,15 @@ public class InstanceHelper {
 		return value;
 	}
 
-	public static void invalidValueForInstance(Facade facade,
-			String entityName, Integer sequence, String attributeName,
-			AttributeType type, String configuration, String value,
-			String expectedMessage) {
+	public static void invalidValueForInstance(String entityName,
+			Integer sequence, String attributeName, AttributeType type,
+			String configuration, String value, String expectedMessage) {
 
-		AttributeHelper.createOneAttribute(entityName, sequence, attributeName,
+        AttributeHelper.createOneAttribute(entityName, sequence, attributeName,
 				type, configuration);
 
-		InstanceHelper.expectExceptionOnCreateInvalidInstance(facade,
-				entityName, expectedMessage, value);
+		InstanceHelper.expectExceptionOnCreateInvalidInstance(entityName,
+				expectedMessage, value);
 
 	}
 }

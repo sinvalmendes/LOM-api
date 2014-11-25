@@ -5,6 +5,7 @@ import org.junit.Before;
 import com.nanuvem.lom.api.Facade;
 import com.nanuvem.lom.api.tests.attribute.AttributeHelper;
 import com.nanuvem.lom.api.tests.entity.EntityHelper;
+import com.nanuvem.lom.api.tests.instance.InstanceHelper;
 
 public abstract class LomTestCase {
     
@@ -24,6 +25,7 @@ public abstract class LomTestCase {
         facade = createFacade();
         EntityHelper.setFacade(facade);
         AttributeHelper.setFacade(facade);
+        InstanceHelper.setFacade(facade);
     }
 
 
