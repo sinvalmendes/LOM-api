@@ -19,7 +19,7 @@ public abstract class TextValueTest extends LomTestCase {
 
         createEntity("abc", "a1");
         createOneAttribute("abc.a1", null, "name", AttributeType.TEXT, null);
-        createAndVerifyOneInstance("abc.a", "Jose");
+        createAndVerifyOneInstance("abc.a1", "Jose");
 
         createEntity("abc", "b");
         createOneAttribute("abc.b", null, "name", AttributeType.TEXT, "{\"mandatory\": true, \"default\": \"Michael\"}");

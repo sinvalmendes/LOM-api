@@ -1,6 +1,9 @@
 package com.nanuvem.lom.api.tests.instance;
 
 import static org.junit.Assert.fail;
+
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.codehaus.jackson.JsonNode;
@@ -17,134 +20,135 @@ import com.nanuvem.lom.api.util.JsonNodeUtil;
 
 public class InstanceHelper {
 
-	private static Facade facade;
-	
+    private static Facade facade;
+
     public static void setFacade(Facade facade) {
         InstanceHelper.facade = facade;
     }
 
-    public static Instance createOneInstance(String entityFullName,
-			String... values) {
+    public static Instance createOneInstance(Entity entity, String... values) {
 
-		Entity entity = null;
-		if (entityFullName != null) {
-			entity = facade.findEntityByFullName(entityFullName);
-		}
+        Instance instance = new Instance();
+        instance.setEntity(entity);
 
-		Instance instance = new Instance();
-		instance.setEntity(entity);
+        for (int i = 0; i < values.length; i++) {
+            AttributeValue attributeValue = new AttributeValue();
+            attributeValue.setValue(values[i]);
 
-		for (int i = 0; i < values.length; i++) {
-			AttributeValue attributeValue = new AttributeValue();
-			attributeValue.setValue(values[i]);
-			
-			if (entity != null) {
-				attributeValue.setAttribute(entity.getAttributes().get(i));
-			}
-			
-			attributeValue.setInstance(instance);
-			instance.getValues().add(attributeValue);
-		}
-		return facade.create(instance);
-	}
+            if (entity != null) {
+                attributeValue.setAttribute(entity.getAttributes().get(i));
+            }
 
-	public static void expectExceptionOnCreateInvalidInstance(String entityFullName,
-			String exceptedMessage, String... values) {
+            attributeValue.setInstance(instance);
+            instance.getValues().add(attributeValue);
+        }
+        return facade.create(instance);
+    }
 
-		try {
-			createOneInstance(entityFullName, values);
-			fail();
-		} catch (MetadataException metadataException) {
-			Assert.assertEquals(exceptedMessage, metadataException.getMessage());
-		}
-	}
+    public static void expectExceptionOnCreateInvalidInstance(String entityFullName, String exceptedMessage,
+            String... values) {
 
-	public static void createAndVerifyOneInstance(String entityFullName,
-			String... values) {
+        try {
+            Entity entity = null;
+            if (entityFullName != null) {
+                entity = facade.findEntityByFullName(entityFullName);
+            }
+            
+            createOneInstance(entity, values);
+            fail();
+        } catch (MetadataException metadataException) {
+            Assert.assertEquals(exceptedMessage, metadataException.getMessage());
+        }
+    }
 
-		Instance createdInstance = createOneInstance(entityFullName, values);
+    public static void createAndVerifyOneInstance(String entityFullName, String... values) {
 
-		Assert.assertNotNull(createdInstance.getId());
-		Assert.assertEquals(new Integer(0), createdInstance.getVersion());
-		Assert.assertEquals(createdInstance,
-				facade.findInstanceById(createdInstance.getId()));
-		Assert.assertEquals(entityFullName, createdInstance.getEntity()
-				.getFullName());
+        Entity entity = null;
+        if (entityFullName != null) {
+            entity = facade.findEntityByFullName(entityFullName);
+        }
 
-		verifyAllAttributesValues(createdInstance, values);
-	}
+        int numberOfInstances = facade.findInstancesByEntityId(entity.getId()).size();
+        
+        Instance newInstance = createOneInstance(entity, values);
 
-	private static void verifyAllAttributesValues(Instance createdInstance,
-			String... values) {
+        Assert.assertNotNull(newInstance.getId());
+        Assert.assertEquals(new Integer(0), newInstance.getVersion());
 
-		for (int i = 0; i < values.length; i++) {
-			String value = values[i];
-			AttributeValue createdValue = createdInstance.getValues().get(i);
+        Instance createdInstance = facade.findInstanceById(newInstance.getId());
+        Assert.assertEquals(newInstance, createdInstance);
+        Assert.assertEquals(entityFullName, createdInstance.getEntity().getFullName());
 
-			Assert.assertNotNull("Id was null", createdValue.getId());
-			
-			if (usesDefaultConfiguration(value, createdValue)) {
-				validateThatDefaultConfigurationWasAppliedToValue(createdValue);
-			} else {
-				Assert.assertEquals(value, createdValue.getValue());
-			}
-		}
-	}
+        verifyAllAttributesValues(createdInstance, values);
 
-	private static boolean usesDefaultConfiguration(
-			String value, AttributeValue createdValue) {
+        List<Instance> instances = facade.findInstancesByEntityId(entity.getId());
+        
+        Assert.assertEquals(numberOfInstances + 1, instances.size());
+        Instance listedInstance = instances.get(numberOfInstances);
+        Assert.assertEquals(newInstance, listedInstance);
+        Assert.assertEquals(entityFullName, listedInstance.getEntity().getFullName());
 
-		return ((value == null) || value.isEmpty())
-				&& (createdValue.getAttribute().getConfiguration() != null)
-				&& (createdValue.getAttribute().getConfiguration()
-						.contains(Attribute.DEFAULT_CONFIGURATION_NAME));
-	}
+        verifyAllAttributesValues(listedInstance, values);
+        
+    }
 
-	public static AttributeValue newAttributeValue(String attributeName,
-			String entityFullName, String value) {
+    private static void verifyAllAttributesValues(Instance createdInstance, String... values) {
 
-		AttributeValue attributeValue = new AttributeValue();
-		attributeValue.setAttribute(facade
-				.findAttributeByNameAndEntityFullName(attributeName,
-						entityFullName));
-		attributeValue.setValue(value);
-		return attributeValue;
-	}
+        for (int i = 0; i < values.length; i++) {
+            String value = values[i];
+            AttributeValue createdValue = createdInstance.getValues().get(i);
 
-	private static void validateThatDefaultConfigurationWasAppliedToValue(
-			AttributeValue attributeValue) {
-		JsonNode jsonNode = null;
-		try {
-			jsonNode = JsonNodeUtil.validate(attributeValue.getAttribute()
-					.getConfiguration(), null);
-		} catch (Exception e) {
-			fail();
-			throw new RuntimeException(
-					"Json configuration is in invalid format");
-		}
-		String defaultField = jsonNode
-				.get(Attribute.DEFAULT_CONFIGURATION_NAME).asText();
-		Assert.assertEquals(attributeValue.getValue(), defaultField);
-	}
+            Assert.assertNotNull("Id was null", createdValue.getId());
 
-	static AttributeValue attributeValue(String attributeName, String objValue) {
-		Attribute attribute = new Attribute();
-		attribute.setName(attributeName);
-		AttributeValue value = new AttributeValue();
-		value.setValue(objValue);
-		value.setAttribute(attribute);
-		return value;
-	}
+            if (usesDefaultConfiguration(value, createdValue)) {
+                validateThatDefaultConfigurationWasAppliedToValue(createdValue);
+            } else {
+                Assert.assertEquals(value, createdValue.getValue());
+            }
+        }
+    }
 
-	public static void invalidValueForInstance(String entityName,
-			Integer sequence, String attributeName, AttributeType type,
-			String configuration, String value, String expectedMessage) {
+    private static boolean usesDefaultConfiguration(String value, AttributeValue createdValue) {
 
-        AttributeHelper.createOneAttribute(entityName, sequence, attributeName,
-				type, configuration);
+        return ((value == null) || value.isEmpty()) && (createdValue.getAttribute().getConfiguration() != null)
+                && (createdValue.getAttribute().getConfiguration().contains(Attribute.DEFAULT_CONFIGURATION_NAME));
+    }
 
-		InstanceHelper.expectExceptionOnCreateInvalidInstance(entityName,
-				expectedMessage, value);
+    public static AttributeValue newAttributeValue(String attributeName, String entityFullName, String value) {
 
-	}
+        AttributeValue attributeValue = new AttributeValue();
+        attributeValue.setAttribute(facade.findAttributeByNameAndEntityFullName(attributeName, entityFullName));
+        attributeValue.setValue(value);
+        return attributeValue;
+    }
+
+    private static void validateThatDefaultConfigurationWasAppliedToValue(AttributeValue attributeValue) {
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = JsonNodeUtil.validate(attributeValue.getAttribute().getConfiguration(), null);
+        } catch (Exception e) {
+            fail();
+            throw new RuntimeException("Json configuration is in invalid format");
+        }
+        String defaultField = jsonNode.get(Attribute.DEFAULT_CONFIGURATION_NAME).asText();
+        Assert.assertEquals(attributeValue.getValue(), defaultField);
+    }
+
+    static AttributeValue attributeValue(String attributeName, String objValue) {
+        Attribute attribute = new Attribute();
+        attribute.setName(attributeName);
+        AttributeValue value = new AttributeValue();
+        value.setValue(objValue);
+        value.setAttribute(attribute);
+        return value;
+    }
+
+    public static void invalidValueForInstance(String entityName, Integer sequence, String attributeName,
+            AttributeType type, String configuration, String value, String expectedMessage) {
+
+        AttributeHelper.createOneAttribute(entityName, sequence, attributeName, type, configuration);
+
+        InstanceHelper.expectExceptionOnCreateInvalidInstance(entityName, expectedMessage, value);
+
+    }
 }

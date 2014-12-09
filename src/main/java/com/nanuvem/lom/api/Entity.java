@@ -13,7 +13,6 @@ public class Entity implements Serializable {
 	private String name;
 	private String namespace;
 	private List<Attribute> attributes = new LinkedList<Attribute>();
-	private List<Instance> instances = new LinkedList<Instance>();
 
 	public Long getId() {
 		return id;
@@ -62,14 +61,6 @@ public class Entity implements Serializable {
 
 	public void setAttributes(List<Attribute> attributes) {
 		this.attributes = attributes;
-	}
-
-	public List<Instance> getInstances() {
-		return instances;
-	}
-
-	public void setInstances(List<Instance> instances) {
-		this.instances = instances;
 	}
 
 	@Override

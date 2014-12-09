@@ -37,4 +37,6 @@ public interface Facade {
 
 	Instance findInstanceById(Long id);
 
+    List<Instance> findInstancesByEntityId(Long entityId);
+
 }
