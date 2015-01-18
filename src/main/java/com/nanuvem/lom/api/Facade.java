@@ -38,5 +38,15 @@ public interface Facade {
 	Instance findInstanceById(Long id);
 
     List<Instance> findInstancesByEntityId(Long entityId);
+    
+    //RelationType
+   
+    RelationType create(RelationType relationType);
 
+	RelationType findRelationTypeById(Long id);
+
+	List<RelationType> findAllRelationTypes();
+    
+	
+    
 }

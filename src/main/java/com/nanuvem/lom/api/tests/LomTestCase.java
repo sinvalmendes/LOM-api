@@ -26,6 +26,7 @@ public abstract class LomTestCase {
         EntityHelper.setFacade(facade);
         AttributeHelper.setFacade(facade);
         InstanceHelper.setFacade(facade);
+        
     }
 
 
