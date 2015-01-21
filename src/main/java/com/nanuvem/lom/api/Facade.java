@@ -45,8 +45,10 @@ public interface Facade {
 
 	RelationType findRelationTypeById(Long id);
 
-	List<RelationType> findAllRelationTypes();
+	List<RelationType> listAllRelationTypes();
     
+	RelationType update(RelationType relationType);
+
 	
     
 }

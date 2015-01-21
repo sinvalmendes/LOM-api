@@ -11,7 +11,7 @@ public class RelationTypeHelper {
 
 	public static RelationType createRelationType(String name,
 			Entity sourceEntity, Entity targetEntity,
-			Cardinality sourceCardinality, Cardinality targetCardinality, boolean isBidirectional) {
+			Cardinality sourceCardinality, Cardinality targetCardinality, boolean isBidirectional, String reverseName) {
 		RelationType relationType = new RelationType();
 		relationType.setName(name);
 		relationType.setSourceEntity(sourceEntity);
@@ -19,6 +19,7 @@ public class RelationTypeHelper {
 		relationType.setSourceCardinality(sourceCardinality);
 		relationType.setTargetCardinality(targetCardinality);
 		relationType.setBidirectional(isBidirectional);
+		relationType.setReverseName(reverseName);
 		relationType = facade.create(relationType);
 		return relationType;
 	}
