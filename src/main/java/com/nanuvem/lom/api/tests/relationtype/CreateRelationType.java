@@ -53,7 +53,7 @@ public abstract class CreateRelationType extends LomTestCase {
 		Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace",
 				"TargetEntity");
 		RelationType relationType = createRelationType("RelationType",
-				sourceEntity, targetEntity, null, null, false, null);
+				sourceEntity, targetEntity, Cardinality.ONE, Cardinality.ONE, false, null);
 		Assert.assertEquals(sourceEntity, relationType.getSourceEntity());
 		Assert.assertEquals(targetEntity, relationType.getTargetEntity());
 		Assert.assertEquals(relationType.getSourceCardinality(),

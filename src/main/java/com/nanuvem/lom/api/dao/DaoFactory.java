@@ -9,4 +9,6 @@ public interface DaoFactory {
 	InstanceDao createInstanceDao();
 
 	AttributeValueDao createAttributeValueDao();
+
+	RelationTypeDao createRelationTypeDao();
 }

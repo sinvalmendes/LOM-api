@@ -6,6 +6,7 @@ import com.nanuvem.lom.api.Facade;
 import com.nanuvem.lom.api.tests.attribute.AttributeHelper;
 import com.nanuvem.lom.api.tests.entity.EntityHelper;
 import com.nanuvem.lom.api.tests.instance.InstanceHelper;
+import com.nanuvem.lom.api.tests.relationtype.RelationTypeHelper;
 
 public abstract class LomTestCase {
     
@@ -26,7 +27,7 @@ public abstract class LomTestCase {
         EntityHelper.setFacade(facade);
         AttributeHelper.setFacade(facade);
         InstanceHelper.setFacade(facade);
-        
+        RelationTypeHelper.setFacade(facade);
     }
 
 

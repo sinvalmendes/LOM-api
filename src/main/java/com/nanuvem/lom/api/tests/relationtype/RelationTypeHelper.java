@@ -9,9 +9,14 @@ public class RelationTypeHelper {
 
 	private static Facade facade;
 
+	public static void setFacade(Facade facade) {
+		RelationTypeHelper.facade = facade;
+	}
+
 	public static RelationType createRelationType(String name,
 			Entity sourceEntity, Entity targetEntity,
-			Cardinality sourceCardinality, Cardinality targetCardinality, boolean isBidirectional, String reverseName) {
+			Cardinality sourceCardinality, Cardinality targetCardinality,
+			boolean isBidirectional, String reverseName) {
 		RelationType relationType = new RelationType();
 		relationType.setName(name);
 		relationType.setSourceEntity(sourceEntity);
