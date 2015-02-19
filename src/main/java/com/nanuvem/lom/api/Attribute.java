@@ -16,7 +16,7 @@ public class Attribute implements Serializable {
 	public final static String REGEX_CONFIGURATION_NAME = "regex";
 	public final static String DEFAULT_CONFIGURATION_NAME = "default";
 	public final static String MANDATORY_CONFIGURATION_NAME = "mandatory";
-	
+
 	private Long id;
 
 	private Integer version;

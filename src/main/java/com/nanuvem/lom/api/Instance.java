@@ -88,5 +88,4 @@ public class Instance implements Serializable {
 				+ values + "]";
 	}
 
-	
 }

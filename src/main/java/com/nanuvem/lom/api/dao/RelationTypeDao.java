@@ -13,4 +13,6 @@ public interface RelationTypeDao {
 	Attribute update(RelationType relationType);
 
 	List<RelationType> listAllRelationTypes();
+
+	void delete(Long id);
 }

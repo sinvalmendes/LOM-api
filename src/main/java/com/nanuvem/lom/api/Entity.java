@@ -43,7 +43,7 @@ public class Entity implements Serializable {
 	}
 
 	public void setNamespace(String namespace) {
-		
+
 		this.namespace = (namespace == null) ? "" : namespace;
 	}
 
@@ -106,6 +106,5 @@ public class Entity implements Serializable {
 		return "Entity [namespace=" + namespace + ", name=" + name + ", id="
 				+ id + ", version=" + version + "]";
 	}
-	
-	
+
 }

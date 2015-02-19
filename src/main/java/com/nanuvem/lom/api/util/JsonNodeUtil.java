@@ -1,12 +1,10 @@
 package com.nanuvem.lom.api.util;
 
-
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.nanuvem.lom.api.MetadataException;
-
 
 public class JsonNodeUtil {
 

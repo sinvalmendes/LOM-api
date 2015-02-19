@@ -22,8 +22,8 @@ public class EntityHelper {
 		return entity;
 	}
 
-	public static void expectExceptionOnInvalidFindEntityByFullName(String fullName,
-			String expectedMessage) {
+	public static void expectExceptionOnInvalidFindEntityByFullName(
+			String fullName, String expectedMessage) {
 		try {
 			facade.findEntityByFullName(fullName);
 			fail();
@@ -38,22 +38,25 @@ public class EntityHelper {
 			facade.listEntitiesByFullName(fragment);
 			fail();
 		} catch (MetadataException e) {
-            String formatedMessage = String.format(expectedMessage, (Object[])  args);
-            Assert.assertEquals(formatedMessage, e.getMessage());
+			String formatedMessage = String.format(expectedMessage,
+					(Object[]) args);
+			Assert.assertEquals(formatedMessage, e.getMessage());
 		}
 	}
 
-	public static void expectExceptionOnInvalidEntityUpdate(Entity entity, String secondnamespace, String secondname,
-			String expectedMessage, String... args) {
-	
+	public static void expectExceptionOnInvalidEntityUpdate(Entity entity,
+			String secondnamespace, String secondname, String expectedMessage,
+			String... args) {
+
 		try {
 			entity.setNamespace(secondnamespace);
 			entity.setName(secondname);
 			facade.update(entity);
 			fail();
 		} catch (MetadataException e) {
-            String formatedMessage = String.format(expectedMessage, (Object[])  args);
-            Assert.assertEquals(formatedMessage, e.getMessage());
+			String formatedMessage = String.format(expectedMessage,
+					(Object[]) args);
+			Assert.assertEquals(formatedMessage, e.getMessage());
 		}
 	}
 
@@ -63,34 +66,34 @@ public class EntityHelper {
 			createAndVerifyOneEntity(namespace, name);
 			fail();
 		} catch (MetadataException e) {
-			String formatedMessage = String.format(expectedMessage, (Object[])  args);
+			String formatedMessage = String.format(expectedMessage,
+					(Object[]) args);
 			Assert.assertEquals(formatedMessage, e.getMessage());
 		}
 	}
 
 	public static void createUpdateAndVerifyOneEntity(String firstNamespace,
-			String firstName, String secondNamespace,
-			String secondName) {
-	
+			String firstName, String secondNamespace, String secondName) {
+
 		Entity entity = new Entity();
 		entity.setNamespace(firstNamespace);
 		entity.setName(firstName);
 		entity = facade.create(entity);
-	
+
 		Assert.assertNotNull(entity.getId());
 		Assert.assertEquals((Integer) 0, entity.getVersion());
-	
+
 		Entity updateEntity = new Entity();
 		updateEntity.setNamespace("secondNamespace");
 		updateEntity.setName("secondName");
 		updateEntity.setId(entity.getId());
 		updateEntity.setVersion(entity.getVersion() + 1);
-	
+
 		Entity entity1 = facade.update(updateEntity);
-	
+
 		List<Entity> allEntities = facade.listAllEntities();
 		Entity entityFound = allEntities.get(0);
-	
+
 		Assert.assertEquals((Integer) 1, entity1.getVersion());
 		Assert.assertNotSame(entity, entityFound);
 		facade.deleteEntity(entity.getId());
@@ -102,23 +105,23 @@ public class EntityHelper {
 		entity1.setNamespace(entity1namespace);
 		entity1.setName(entity1name);
 		entity1 = facade.create(entity1);
-	
+
 		Entity entity2 = new Entity();
 		entity2.setNamespace(entity2namespace);
 		entity2.setName(entity2name);
 		entity2 = facade.create(entity2);
-	
+
 		Assert.assertNotNull(entity1.getId());
 		Assert.assertNotNull(entity2.getId());
-	
+
 		Assert.assertEquals((Integer) 0, entity1.getVersion());
 		Assert.assertEquals((Integer) 0, entity2.getVersion());
-	
+
 		List<Entity> entities = facade.listAllEntities();
 		Assert.assertEquals(2, entities.size());
 		Assert.assertEquals(entity1, entities.get(0));
 		Assert.assertEquals(entity2, entities.get(1));
-	
+
 		facade.deleteEntity(entity1.getId());
 		facade.deleteEntity(entity2.getId());
 	}
@@ -128,7 +131,7 @@ public class EntityHelper {
 		entity.setNamespace(namespace);
 		entity.setName(name);
 		entity = facade.create(entity);
-	
+
 		Assert.assertNotNull(entity.getId());
 		Assert.assertEquals((Integer) 0, entity.getVersion());
 		return entity;
@@ -139,14 +142,14 @@ public class EntityHelper {
 		entity.setNamespace(namespace);
 		entity.setName(name);
 		entity = facade.create(entity);
-	
+
 		Assert.assertNotNull(entity.getId());
 		Assert.assertEquals((Integer) 0, entity.getVersion());
-	
+
 		List<Entity> entities = facade.listAllEntities();
 		Assert.assertEquals(1, entities.size());
 		Assert.assertEquals(entity, entities.get(0));
-	
+
 		facade.deleteEntity(entity.getId());
 	}
 

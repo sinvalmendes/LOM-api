@@ -109,6 +109,5 @@ public class AttributeValue implements Serializable {
 		return "AttributeValue [value=" + value + ", id=" + id + ", version="
 				+ version + "]";
 	}
-	
-	
+
 }

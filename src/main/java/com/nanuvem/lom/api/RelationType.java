@@ -11,7 +11,7 @@ public class RelationType {
 	private String reverseName;
 	private Cardinality sourceCardinality;
 	private Cardinality targetCardinality;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -87,5 +87,5 @@ public class RelationType {
 	public void setReverseName(String reverseName) {
 		this.reverseName = reverseName;
 	}
-		
+
 }

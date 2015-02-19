@@ -12,24 +12,24 @@ import com.nanuvem.lom.api.tests.LomTestCase;
 
 public abstract class DeleteEntityTest extends LomTestCase {
 
-    @Test
-    public void deleteEntity() {
-        Entity c = createEntity("a", "aaa");
-        facade.deleteEntity(c.getId());
+	@Test
+	public void deleteEntity() {
+		Entity c = createEntity("a", "aaa");
+		facade.deleteEntity(c.getId());
 
-        try {
-            facade.deleteEntity(c.getId());
-            fail();
-        } catch (MetadataException e) {
-            Assert.assertEquals("Unknown id for Entity: 1", e.getMessage());
-        }
+		try {
+			facade.deleteEntity(c.getId());
+			fail();
+		} catch (MetadataException e) {
+			Assert.assertEquals("Unknown id for Entity: 1", e.getMessage());
+		}
 
-        try {
-            facade.deleteEntity(c.getId() + 10);
-            fail();
-        } catch (MetadataException e) {
-            Assert.assertEquals("Unknown id for Entity: 11", e.getMessage());
-        }
+		try {
+			facade.deleteEntity(c.getId() + 10);
+			fail();
+		} catch (MetadataException e) {
+			Assert.assertEquals("Unknown id for Entity: 11", e.getMessage());
+		}
 
-    }
+	}
 }
