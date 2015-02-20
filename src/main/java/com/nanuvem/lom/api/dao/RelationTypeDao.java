@@ -2,7 +2,6 @@ package com.nanuvem.lom.api.dao;
 
 import java.util.List;
 
-import com.nanuvem.lom.api.Attribute;
 import com.nanuvem.lom.api.RelationType;
 
 public interface RelationTypeDao {
@@ -10,7 +9,7 @@ public interface RelationTypeDao {
 
 	RelationType findRelationTypeById(Long id);
 
-	Attribute update(RelationType relationType);
+	RelationType update(RelationType relationType);
 
 	List<RelationType> listAllRelationTypes();
 

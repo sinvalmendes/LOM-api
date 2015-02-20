@@ -51,4 +51,6 @@ public interface Facade {
 
 	void deleteRelationType(Long id);
 
+	Relation create(Relation relation);
+
 }

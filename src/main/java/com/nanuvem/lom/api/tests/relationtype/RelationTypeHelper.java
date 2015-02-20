@@ -28,4 +28,5 @@ public class RelationTypeHelper {
 		relationType = facade.create(relationType);
 		return relationType;
 	}
+	
 }
