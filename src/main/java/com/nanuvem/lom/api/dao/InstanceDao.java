@@ -6,14 +6,14 @@ import com.nanuvem.lom.api.Instance;
 
 public interface InstanceDao {
 
-	Instance create(Instance instance);
+    Instance create(Instance instance);
 
-	Instance findInstanceById(Long id);
+    Instance findInstanceById(Long id);
 
-	List<Instance> findInstancesByEntityId(Long entityId);
+    List<Instance> findInstancesByEntityId(Long entityId);
 
-	Instance update(Instance instance);
+    Instance update(Instance instance);
 
-	void delete(Long id);
+    void delete(Long id);
 
 }

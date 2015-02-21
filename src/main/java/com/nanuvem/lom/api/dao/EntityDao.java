@@ -6,17 +6,17 @@ import com.nanuvem.lom.api.Entity;
 
 public interface EntityDao {
 
-	Entity create(Entity entity);
+    Entity create(Entity entity);
 
-	List<Entity> listAll();
+    List<Entity> listAll();
 
-	Entity findById(Long id);
+    Entity findById(Long id);
 
-	List<Entity> listByFullName(String fragment);
+    List<Entity> listByFullName(String fragment);
 
-	Entity findByFullName(String fullName);
+    Entity findByFullName(String fullName);
 
-	Entity update(Entity entity);
+    Entity update(Entity entity);
 
-	void delete(Long id);
+    void delete(Long id);
 }

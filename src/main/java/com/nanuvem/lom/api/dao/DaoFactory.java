@@ -2,13 +2,15 @@ package com.nanuvem.lom.api.dao;
 
 public interface DaoFactory {
 
-	EntityDao createEntityDao();
+    EntityDao createEntityDao();
 
-	AttributeDao createAttributeDao();
+    AttributeDao createAttributeDao();
 
-	InstanceDao createInstanceDao();
+    InstanceDao createInstanceDao();
 
-	AttributeValueDao createAttributeValueDao();
+    AttributeValueDao createAttributeValueDao();
 
-	RelationTypeDao createRelationTypeDao();
+    RelationTypeDao createRelationTypeDao();
+
+    RelationDao createRelationDao();
 }

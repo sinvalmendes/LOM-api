@@ -12,17 +12,15 @@ import com.nanuvem.lom.api.tests.entity.EntityHelper;
 
 public abstract class DeleteRelationTypeTest extends LomTestCase {
 
-	@Test
-	public void deleteRelationType() {
-		Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace",
-				"SourceEntity");
-		Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace",
-				"TargetEntity");
-		RelationType relationType = createRelationType("RelationType",
-				sourceEntity, targetEntity, null, null, false, null);
-		Assert.assertEquals(1, facade.listAllRelationTypes().size());
-		facade.deleteRelationType(relationType.getId());
-		Assert.assertEquals(0, facade.listAllRelationTypes().size());
-		Assert.assertNull(facade.findRelationTypeById(relationType.getId()));
-	}
+    @Test
+    public void deleteRelationType() {
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
+                null);
+        Assert.assertEquals(1, facade.listAllRelationTypes().size());
+        facade.deleteRelationType(relationType.getId());
+        Assert.assertEquals(0, facade.listAllRelationTypes().size());
+        Assert.assertNull(facade.findRelationTypeById(relationType.getId()));
+    }
 }

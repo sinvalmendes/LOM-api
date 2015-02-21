@@ -1,5 +1,17 @@
 package com.nanuvem.lom.api.dao;
 
-public class RelationDao {
+import java.util.List;
 
+import com.nanuvem.lom.api.Relation;
+
+public interface RelationDao {
+    Relation create(Relation relation);
+
+    Relation findById(Long id);
+
+    Relation update(Relation relation);
+
+    List<Relation> listAllRelations();
+
+    void delete(Long id);
 }
