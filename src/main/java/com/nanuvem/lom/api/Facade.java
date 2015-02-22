@@ -62,4 +62,8 @@ public interface Facade {
 
     void deleteRelation(Long id);
 
+    List<Relation> findRelationsBySourceInstance(Instance source);
+
+    List<Relation> findRelationsByRelationType(RelationType relationType);
+
 }

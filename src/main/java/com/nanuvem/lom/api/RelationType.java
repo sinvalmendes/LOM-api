@@ -1,5 +1,7 @@
 package com.nanuvem.lom.api;
 
+import java.lang.reflect.Field;
+
 public class RelationType {
 
     private Long id;
@@ -86,6 +88,19 @@ public class RelationType {
 
     public void setReverseName(String reverseName) {
         this.reverseName = reverseName;
+    }
+    
+    public static RelationType cloneObject(RelationType obj){
+        try{
+            RelationType clone = obj.getClass().newInstance();
+            for (Field field : obj.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                field.set(clone, field.get(obj));
+            }
+            return clone;
+        }catch(Exception e){
+            return null;
+        }
     }
 
 }
