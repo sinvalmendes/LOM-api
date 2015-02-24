@@ -20,4 +20,6 @@ public interface RelationDao {
     List<Relation> findRelationsBySourceInstance(Instance source);
 
     List<Relation> findRelationsByRelationType(RelationType relationType);
+
+    List<Relation> findRelationsByTargetInstance(Instance targetInstance);
 }

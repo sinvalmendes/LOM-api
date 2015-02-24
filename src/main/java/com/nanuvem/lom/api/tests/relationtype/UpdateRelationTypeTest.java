@@ -4,8 +4,6 @@ import static com.nanuvem.lom.api.tests.relationtype.RelationTypeHelper.createRe
 
 import java.util.List;
 
-import javax.management.relation.RelationTypeSupport;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -181,13 +179,104 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
         Assert.assertEquals(target, allRelations.get(0).getTarget());
         Assert.assertEquals(target2, allRelations.get(1).getTarget());
     }
-    
-    //TODO
-    // updateAnOneToManyRelationTypeToOneToOne (should id delete the Many target
-    // instances?)
-    // updateAOneToManyRelationTypeToManyToMany
-    // updateAManyToManyRelationTypeToOneToMany
-    
+
+    @Test
+    public void updateAnOneToManyRelationTypeToOneToOne() {
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.ONE,
+                Cardinality.MANY, false, null);
+        String[] args = new String[0];
+        Instance source1 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance source2 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target1 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target2 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target3 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target4 = InstanceHelper.createOneInstance(targetEntity, args);
+
+        Relation relation1 = RelationHelper.createRelation(relationType, source1, target1);
+        Relation relation2 = RelationHelper.createRelation(relationType, source1, target2);
+        Relation relation3 = RelationHelper.createRelation(relationType, source2, target3);
+        Relation relation4 = RelationHelper.createRelation(relationType, source2, target4);
+
+        relationType.setTargetCardinality(Cardinality.ONE);
+        facade.update(relationType);
+
+        List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1);
+        List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2);
+
+        Assert.assertEquals(1, allRelationsSource1.size());
+        Assert.assertEquals(relation1, allRelationsSource1.get(0));
+        Assert.assertEquals(1, allRelationsSource2.size());
+        Assert.assertEquals(relation3, allRelationsSource2.get(0));
+    }
+
+    @Test
+    public void updateAOneToManyRelationTypeToManyToMany() {
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.ONE,
+                Cardinality.MANY, false, null);
+        String[] args = new String[0];
+        Instance source1 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance source2 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target1 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target2 = InstanceHelper.createOneInstance(targetEntity, args);
+
+        Relation relation1 = RelationHelper.createRelation(relationType, source1, target1);
+        Relation relation2 = RelationHelper.createRelation(relationType, source1, target2);
+
+        try {
+            RelationHelper.createRelation(relationType, source2, target2);
+            Assert.fail();
+        } catch (MetadataException me) {
+            Assert.assertEquals(
+                    "Invalid argument, the source cardinality is ONE, the target instance cannot be associated to the source instance!",
+                    me.getMessage());
+        }
+        relationType.setSourceCardinality(Cardinality.MANY);
+        facade.update(relationType);
+        Relation relation3 = RelationHelper.createRelation(relationType, source2, target2);
+        List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1);
+        List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2);
+
+        Assert.assertEquals(2, allRelationsSource1.size());
+        Assert.assertEquals(relation1, allRelationsSource1.get(0));
+        Assert.assertEquals(relation2, allRelationsSource1.get(1));
+        Assert.assertEquals(1, allRelationsSource2.size());
+        Assert.assertEquals(relation3, allRelationsSource2.get(0));
+    }
+
+    @Test
+    public void updateAManyToManyRelationTypeToOneToMany() {
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.MANY,
+                Cardinality.MANY, false, null);
+        String[] args = new String[0];
+        Instance source1 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance source2 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target1 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target2 = InstanceHelper.createOneInstance(targetEntity, args);
+
+        Relation relation1 = RelationHelper.createRelation(relationType, source1, target1);
+        Relation relation2 = RelationHelper.createRelation(relationType, source1, target2);
+        Relation relation3 = RelationHelper.createRelation(relationType, source2, target1);
+        Relation relation4 = RelationHelper.createRelation(relationType, source2, target2);
+
+        relationType = facade.findRelationTypeById(relationType.getId());
+        relationType.setSourceCardinality(Cardinality.ONE);
+        facade.update(relationType);
+
+        List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1);
+        List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2);
+
+        Assert.assertEquals(2, allRelationsSource1.size());
+        Assert.assertEquals(relation1, allRelationsSource1.get(0));
+        Assert.assertEquals(relation2, allRelationsSource1.get(1));
+        Assert.assertEquals(0, allRelationsSource2.size());
+    }
+
     @Test
     public void updateAnOneToOneRelationTypeToManyToMany() {
         Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
@@ -245,7 +334,6 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
         Relation relation3 = RelationHelper.createRelation(relationType, source2, target1);
         Relation relation4 = RelationHelper.createRelation(relationType, source2, target2);
 
-        relationType = facade.findRelationTypeById(relationType.getId());
         relationType.setSourceCardinality(Cardinality.ONE);
         relationType.setTargetCardinality(Cardinality.ONE);
         facade.update(relationType);
@@ -262,4 +350,5 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
                     me.getMessage());
         }
     }
+
 }
