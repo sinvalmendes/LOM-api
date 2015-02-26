@@ -127,27 +127,24 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
         }
     }
 
-    // This test make sense?
-    // @Test
-    // public void
-    // getExceptionWhenTriesToPutAReverseNameInANonBidirectionalRelationType() {
-    // Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace",
-    // "SourceEntity");
-    // Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace",
-    // "TargetEntity");
-    // RelationType relationType = createRelationType("RelationType",
-    // sourceEntity, targetEntity, null, null, false, null);
-    // relationType.setReverseName("ReverseName");
-    // try {
-    // facade.update(relationType);
-    // Assert.fail();
-    // } catch (MetadataException me) {
-    // Assert.assertEquals(
-    // "Invalid argument: Reverse Name should be null when the relationship is not bidirectional!",
-    // me.getMessage());
-    // }
-    // }
-
+    /*
+    @Test
+    public void getExceptionWhenTriesToPutAReverseNameInANonBidirectionalRelationType() {
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
+                null);
+        relationType.setReverseName("ReverseName");
+        try {
+            facade.update(relationType);
+            Assert.fail();
+        } catch (MetadataException me) {
+            Assert.assertEquals(
+                    "Invalid argument: Reverse Name should be null when the relationship is not bidirectional!",
+                    me.getMessage());
+        }
+    }
+    */
     @Test
     public void updateAnOneToOneRelationTypeToOneToMany() {
         Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
@@ -172,7 +169,7 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
         relationType.setTargetCardinality(Cardinality.MANY);
         facade.update(relationType);
         Relation relation2 = RelationHelper.createRelation(relationType, source, target2);
-        List<Relation> allRelations = facade.findRelationsBySourceInstance(source);
+        List<Relation> allRelations = facade.findRelationsBySourceInstance(source, relationType);
 
         Assert.assertEquals(relation1, allRelations.get(0));
         Assert.assertEquals(relation2, allRelations.get(1));
@@ -202,8 +199,8 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
         relationType.setTargetCardinality(Cardinality.ONE);
         facade.update(relationType);
 
-        List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1);
-        List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2);
+        List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1, relationType);
+        List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2, relationType);
 
         Assert.assertEquals(1, allRelationsSource1.size());
         Assert.assertEquals(relation1, allRelationsSource1.get(0));
@@ -237,8 +234,8 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
         relationType.setSourceCardinality(Cardinality.MANY);
         facade.update(relationType);
         Relation relation3 = RelationHelper.createRelation(relationType, source2, target2);
-        List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1);
-        List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2);
+        List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1, relationType);
+        List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2, relationType);
 
         Assert.assertEquals(2, allRelationsSource1.size());
         Assert.assertEquals(relation1, allRelationsSource1.get(0));
@@ -268,8 +265,8 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
         relationType.setSourceCardinality(Cardinality.ONE);
         facade.update(relationType);
 
-        List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1);
-        List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2);
+        List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1, relationType);
+        List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2, relationType);
 
         Assert.assertEquals(2, allRelationsSource1.size());
         Assert.assertEquals(relation1, allRelationsSource1.get(0));
@@ -306,8 +303,8 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
         Relation relation2 = RelationHelper.createRelation(relationType, source1, target2);
         Relation relation3 = RelationHelper.createRelation(relationType, source2, target2);
 
-        List<Relation> relationsOfSource1 = facade.findRelationsBySourceInstance(source1);
-        List<Relation> relationsOfSource2 = facade.findRelationsBySourceInstance(source2);
+        List<Relation> relationsOfSource1 = facade.findRelationsBySourceInstance(source1, relationType);
+        List<Relation> relationsOfSource2 = facade.findRelationsBySourceInstance(source2, relationType);
 
         Assert.assertEquals(relationsOfSource1.get(0), relation1);
         Assert.assertEquals(relationsOfSource1.get(1), relation2);

@@ -33,6 +33,21 @@ public abstract class CreateRelationTest extends LomTestCase {
     }
 
     @Test
+    public void getsExceptionWhenRelationTypeIsNull(){
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        String[] args = new String[0];
+        Instance source = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target = InstanceHelper.createOneInstance(targetEntity, args);
+        try {
+            RelationHelper.createRelation(null, source, target);
+            Assert.fail();
+        } catch (MetadataException me) {
+            Assert.assertEquals("Invalid argument: The relation type is mandatory!", me.getMessage());
+        }
+    }
+    
+    @Test
     public void getsExceptionWhenTriesToCreateARelationWithoutSourceInstance() {
         Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
         Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");

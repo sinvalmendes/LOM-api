@@ -17,7 +17,7 @@ public interface RelationDao {
 
     void delete(Long id);
 
-    List<Relation> findRelationsBySourceInstance(Instance source);
+    List<Relation> findRelationsBySourceInstance(Instance source, RelationType relationType);
 
     List<Relation> findRelationsByRelationType(RelationType relationType);
 
