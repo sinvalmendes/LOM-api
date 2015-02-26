@@ -128,23 +128,20 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
     }
 
     /*
-    @Test
-    public void getExceptionWhenTriesToPutAReverseNameInANonBidirectionalRelationType() {
-        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
-        RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
-                null);
-        relationType.setReverseName("ReverseName");
-        try {
-            facade.update(relationType);
-            Assert.fail();
-        } catch (MetadataException me) {
-            Assert.assertEquals(
-                    "Invalid argument: Reverse Name should be null when the relationship is not bidirectional!",
-                    me.getMessage());
-        }
-    }
-    */
+     * @Test public void
+     * getExceptionWhenTriesToPutAReverseNameInANonBidirectionalRelationType() {
+     * Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace",
+     * "SourceEntity"); Entity targetEntity =
+     * EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+     * RelationType relationType = createRelationType("RelationType",
+     * sourceEntity, targetEntity, null, null, false, null);
+     * relationType.setReverseName("ReverseName"); try {
+     * facade.update(relationType); Assert.fail(); } catch (MetadataException
+     * me) { Assert.assertEquals(
+     * "Invalid argument: Reverse Name should be null when the relationship is not bidirectional!"
+     * , me.getMessage()); } }
+     */
+
     @Test
     public void updateAnOneToOneRelationTypeToOneToMany() {
         Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
@@ -197,15 +194,17 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
         Relation relation4 = RelationHelper.createRelation(relationType, source2, target4);
 
         relationType.setTargetCardinality(Cardinality.ONE);
-        facade.update(relationType);
-
+        try {
+            facade.update(relationType);
+        } catch (MetadataException me) {
+            Assert.assertEquals(
+                    "Invalid update: there are more than one Relation with the actual cardinality configuration!",
+                    me.getMessage());
+        }
         List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1, relationType);
         List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2, relationType);
-
-        Assert.assertEquals(1, allRelationsSource1.size());
-        Assert.assertEquals(relation1, allRelationsSource1.get(0));
-        Assert.assertEquals(1, allRelationsSource2.size());
-        Assert.assertEquals(relation3, allRelationsSource2.get(0));
+        Assert.assertEquals(2, allRelationsSource1.size());
+        Assert.assertEquals(2, allRelationsSource2.size());
     }
 
     @Test
@@ -263,15 +262,17 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
         relationType = facade.findRelationTypeById(relationType.getId());
         relationType.setSourceCardinality(Cardinality.ONE);
-        facade.update(relationType);
-
+        try {
+            facade.update(relationType);
+        } catch (MetadataException me) {
+            Assert.assertEquals(
+                    "Invalid update: there are more than one Relation with the actual cardinality configuration!",
+                    me.getMessage());
+        }
         List<Relation> allRelationsSource1 = facade.findRelationsBySourceInstance(source1, relationType);
         List<Relation> allRelationsSource2 = facade.findRelationsBySourceInstance(source2, relationType);
-
         Assert.assertEquals(2, allRelationsSource1.size());
-        Assert.assertEquals(relation1, allRelationsSource1.get(0));
-        Assert.assertEquals(relation2, allRelationsSource1.get(1));
-        Assert.assertEquals(0, allRelationsSource2.size());
+        Assert.assertEquals(2, allRelationsSource2.size());
     }
 
     @Test
@@ -333,9 +334,14 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
         relationType.setSourceCardinality(Cardinality.ONE);
         relationType.setTargetCardinality(Cardinality.ONE);
-        facade.update(relationType);
-
-        Assert.assertEquals(1, facade.findRelationsByRelationType(relationType).size());
+        try {
+            facade.update(relationType);
+        } catch (MetadataException me) {
+            Assert.assertEquals(
+                    "Invalid update: there are more than one Relation with the actual cardinality configuration!",
+                    me.getMessage());
+        }
+        Assert.assertEquals(4, facade.findRelationsByRelationType(relationType).size());
         Assert.assertEquals(relation1, facade.findRelationsByRelationType(relationType).get(0));
 
         try {
