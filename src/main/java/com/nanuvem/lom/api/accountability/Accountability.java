@@ -1,6 +1,9 @@
 package com.nanuvem.lom.api.accountability;
 
 public class Accountability {
+
+    private Long id;
+    private Integer version;
     private Instance parent;
     private Instance child;
     private AccountabilityType accountabilityType;
@@ -11,6 +14,22 @@ public class Accountability {
         this.child = child;
         this.child.addParentAccountability(this);
         this.accountabilityType = accountabilityType;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public static Accountability create(Instance parent, Instance child, AccountabilityType accountabilityType) {
