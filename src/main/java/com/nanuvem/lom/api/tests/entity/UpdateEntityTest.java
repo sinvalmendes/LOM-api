@@ -7,7 +7,7 @@ import static com.nanuvem.lom.api.tests.entity.EntityHelper.expectExceptionOnInv
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.EntityType;
 import com.nanuvem.lom.api.tests.LomTestCase;
 
 public abstract class UpdateEntityTest extends LomTestCase {
@@ -38,7 +38,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void renameCausingTwoEntitiesWithSameNameInDifferentPackages() {
-        Entity ea = createAndSaveOneEntity("a", "aaa");
+        EntityType ea = createAndSaveOneEntity("a", "aaa");
         createAndSaveOneEntity("b", "bbb");
 
         ea.setName("bbb");
@@ -47,7 +47,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void moveCausingTwoEntitiesWithSameNameInDifferentPackages() {
-        Entity ea = createAndSaveOneEntity("a", "aaa");
+        EntityType ea = createAndSaveOneEntity("a", "aaa");
         createAndSaveOneEntity("b", "bbb");
 
         ea.setNamespace("c");
@@ -57,7 +57,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void newNameAndPackageWithSpaces() {
-        Entity ea = createAndSaveOneEntity("a", "aaa");
+        EntityType ea = createAndSaveOneEntity("a", "aaa");
         expectExceptionOnInvalidEntityUpdate(ea, "name space", "aaa", INVALID_VALUE_FOR_ENTITY, "namespace",
                 "name space");
         expectExceptionOnInvalidEntityUpdate(ea, "namespace", "na me", INVALID_VALUE_FOR_ENTITY, "name", "na me");
@@ -65,7 +65,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void removeName() {
-        Entity ea = createAndSaveOneEntity("a", "aaa");
+        EntityType ea = createAndSaveOneEntity("a", "aaa");
         expectExceptionOnInvalidEntityUpdate(ea, "namespace", null, ENTITY_NAME_IS_MANDATORY);
         expectExceptionOnInvalidEntityUpdate(ea, "namespace", "", ENTITY_NAME_IS_MANDATORY);
         expectExceptionOnInvalidEntityUpdate(ea, null, null, ENTITY_NAME_IS_MANDATORY);
@@ -74,7 +74,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void renameMoveCausingTwoEntitiesWithSameNameInDefaultPackage() {
-        Entity ea = createAndSaveOneEntity("a", "aaa");
+        EntityType ea = createAndSaveOneEntity("a", "aaa");
         createAndSaveOneEntity("b", "bbb");
         createAndSaveOneEntity("b", "aaa");
         createAndSaveOneEntity("a", "bbb");
@@ -83,9 +83,9 @@ public abstract class UpdateEntityTest extends LomTestCase {
         expectExceptionOnInvalidEntityUpdate(ea, "b", "aaa", ENTITY_ALREADY_EXISTS, "b.aaa");
         expectExceptionOnInvalidEntityUpdate(ea, "a", "bbb", ENTITY_ALREADY_EXISTS, "a.bbb");
 
-        Entity e1 = createAndSaveOneEntity("a.b.c", "aaa");
-        Entity e2 = createAndSaveOneEntity("b.c", "aaa");
-        Entity e3 = createAndSaveOneEntity("a.b.c", "bbb");
+        EntityType e1 = createAndSaveOneEntity("a.b.c", "aaa");
+        EntityType e2 = createAndSaveOneEntity("b.c", "aaa");
+        EntityType e3 = createAndSaveOneEntity("a.b.c", "bbb");
         createAndSaveOneEntity("b.c", "bbb");
 
         expectExceptionOnInvalidEntityUpdate(e1, "b.c", "bbb", ENTITY_ALREADY_EXISTS, "b.c.bbb");
@@ -95,18 +95,18 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void renameMoveCausingTwoEntitiesWithSameNameInAnonDefaultPackage() {
-        Entity ea1 = createAndSaveOneEntity("a", "aaa");
-        Entity ea2 = createAndSaveOneEntity(null, "aaa");
-        Entity ea3 = createAndSaveOneEntity("a", "bbb");
+        EntityType ea1 = createAndSaveOneEntity("a", "aaa");
+        EntityType ea2 = createAndSaveOneEntity(null, "aaa");
+        EntityType ea3 = createAndSaveOneEntity("a", "bbb");
         createAndSaveOneEntity(null, "bbb");
 
         expectExceptionOnInvalidEntityUpdate(ea1, null, "bbb", ENTITY_ALREADY_EXISTS, "bbb");
         expectExceptionOnInvalidEntityUpdate(ea2, null, "bbb", ENTITY_ALREADY_EXISTS, "bbb");
         expectExceptionOnInvalidEntityUpdate(ea3, null, "bbb", ENTITY_ALREADY_EXISTS, "bbb");
 
-        Entity ec1 = createAndSaveOneEntity("a.b.c", "ccc");
-        Entity ec2 = createAndSaveOneEntity("", "ccc");
-        Entity ec3 = createAndSaveOneEntity("a.b.c", "ddd");
+        EntityType ec1 = createAndSaveOneEntity("a.b.c", "ccc");
+        EntityType ec2 = createAndSaveOneEntity("", "ccc");
+        EntityType ec3 = createAndSaveOneEntity("a.b.c", "ddd");
         createAndSaveOneEntity("", "ddd");
 
         expectExceptionOnInvalidEntityUpdate(ec1, "", "ddd", ENTITY_ALREADY_EXISTS, "ddd");
@@ -116,7 +116,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void renameMoveCausingNameAndPackagesWithInvalidChars() {
-        Entity ea = createAndSaveOneEntity("a", "aaa");
+        EntityType ea = createAndSaveOneEntity("a", "aaa");
         expectExceptionOnInvalidEntityUpdate(ea, "a", "aaa$", INVALID_VALUE_FOR_ENTITY, "name", "aaa$");
         expectExceptionOnInvalidEntityUpdate(ea, "a", "aaa#", INVALID_VALUE_FOR_ENTITY, "name", "aaa#");
         expectExceptionOnInvalidEntityUpdate(ea, "a", "aaa=", INVALID_VALUE_FOR_ENTITY, "name", "aaa=");
@@ -136,7 +136,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void renameMoveForcingCaseInsentivePackagesAndNames() {
-        Entity ea = createAndSaveOneEntity("a", "aaa");
+        EntityType ea = createAndSaveOneEntity("a", "aaa");
         createAndSaveOneEntity("b", "bbb");
         createAndSaveOneEntity("CcC", "ccc");
         createAndSaveOneEntity("DDD", "ddd");
@@ -151,7 +151,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void invalidIdAndVersion() {
-        Entity ea = createAndSaveOneEntity("a", "aaa");
+        EntityType ea = createAndSaveOneEntity("a", "aaa");
         Long originalId = ea.getId();
         Integer originalVersion = ea.getVersion();
 
@@ -179,7 +179,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
 
     @Test
     public void severalUpdates() {
-        Entity ea = createAndSaveOneEntity("a", "aaa");
+        EntityType ea = createAndSaveOneEntity("a", "aaa");
 
         ea.setNamespace("b");
         ea.setName("abc");
@@ -197,7 +197,7 @@ public abstract class UpdateEntityTest extends LomTestCase {
         ea.setName("abc");
         ea = facade.update(ea);
 
-        Entity found = facade.findEntityById(ea.getId());
+        EntityType found = facade.findEntityById(ea.getId());
         Assert.assertEquals("a.b.c", found.getNamespace());
         Assert.assertEquals("abc", found.getName());
         Assert.assertEquals(new Long(1), found.getId());

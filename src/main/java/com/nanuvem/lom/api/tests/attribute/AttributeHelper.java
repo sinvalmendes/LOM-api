@@ -3,9 +3,9 @@ package com.nanuvem.lom.api.tests.attribute;
 import static org.junit.Assert.fail;
 import junit.framework.Assert;
 
-import com.nanuvem.lom.api.Attribute;
+import com.nanuvem.lom.api.PropertyType;
 import com.nanuvem.lom.api.AttributeType;
-import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.EntityType;
 import com.nanuvem.lom.api.Facade;
 import com.nanuvem.lom.api.MetadataException;
 
@@ -29,20 +29,20 @@ public class AttributeHelper {
         AttributeHelper.facade = facade;
     }
 
-    public static Attribute createOneAttribute(String entityFullName, Integer attributeSequence, String attributeName,
+    public static PropertyType createOneAttribute(String entityFullName, Integer attributeSequence, String attributeName,
             AttributeType attributeType, String attributeConfiguration) {
 
-        Entity entity = facade.findEntityByFullName(entityFullName);
-        Attribute attribute = new Attribute();
-        attribute.setName(attributeName);
+        EntityType entityType = facade.findEntityByFullName(entityFullName);
+        PropertyType propertyType = new PropertyType();
+        propertyType.setName(attributeName);
 
-        attribute.setEntity(entity);
-        attribute.setSequence(attributeSequence);
-        attribute.setType(attributeType);
-        attribute.setConfiguration(attributeConfiguration);
-        attribute = facade.create(attribute);
+        propertyType.setEntity(entityType);
+        propertyType.setSequence(attributeSequence);
+        propertyType.setType(attributeType);
+        propertyType.setConfiguration(attributeConfiguration);
+        propertyType = facade.create(propertyType);
 
-        return attribute;
+        return propertyType;
     }
 
     public static void expectExceptionOnCreateInvalidAttribute(String entityFullName, Integer attributeSequence,
@@ -61,7 +61,7 @@ public class AttributeHelper {
     public static void createAndVerifyOneAttribute(String entityFullName, Integer attributeSequence,
             String attributeName, AttributeType attributeType, String attributeConfiguration) {
 
-        Attribute createdAttribute = createOneAttribute(entityFullName, attributeSequence, attributeName,
+        PropertyType createdAttribute = createOneAttribute(entityFullName, attributeSequence, attributeName,
                 attributeType, attributeConfiguration);
 
         Assert.assertNotNull(createdAttribute.getId());
@@ -69,22 +69,22 @@ public class AttributeHelper {
         Assert.assertEquals(createdAttribute, facade.findAttributeById(createdAttribute.getId()));
     }
 
-    public static Attribute updateAttribute(String fullEntityName, Attribute oldAttribute, Integer newSequence,
+    public static PropertyType updateAttribute(String fullEntityName, PropertyType oldAttribute, Integer newSequence,
             String newName, AttributeType newType, String newConfiguration) {
 
-        Attribute attribute = facade.findAttributeByNameAndEntityFullName(oldAttribute.getName(), fullEntityName);
+        PropertyType propertyType = facade.findAttributeByNameAndEntityFullName(oldAttribute.getName(), fullEntityName);
 
-        attribute.setSequence(newSequence);
-        attribute.setName(newName);
-        attribute.setType(newType);
-        attribute.setConfiguration(newConfiguration);
-        attribute.setId(oldAttribute.getId());
-        attribute.setVersion(oldAttribute.getVersion());
+        propertyType.setSequence(newSequence);
+        propertyType.setName(newName);
+        propertyType.setType(newType);
+        propertyType.setConfiguration(newConfiguration);
+        propertyType.setId(oldAttribute.getId());
+        propertyType.setVersion(oldAttribute.getVersion());
 
-        return facade.update(attribute);
+        return facade.update(propertyType);
     }
 
-    public static void expectExceptionOnUpdateInvalidAttribute(String entityFullName, Attribute oldAttribute,
+    public static void expectExceptionOnUpdateInvalidAttribute(String entityFullName, PropertyType oldAttribute,
             Integer newSequence, String newName, AttributeType newType, String newConfiguration, String exceptedMessage) {
 
         try {
@@ -95,13 +95,13 @@ public class AttributeHelper {
         }
     }
 
-    public static void expectExceptionOnUpdateWithInvalidNewName(Attribute createdAttribute, String invalidNewName,
+    public static void expectExceptionOnUpdateWithInvalidNewName(PropertyType createdAttribute, String invalidNewName,
             String exceptedMessage) {
         expectExceptionOnUpdateInvalidAttribute("abc.a", createdAttribute, 1, invalidNewName, LONGTEXT, null,
                 exceptedMessage);
     }
 
-    public static void verifyUpdatedAttribute(Attribute attributeBeforeUpgrade, Attribute updatedAttribute) {
+    public static void verifyUpdatedAttribute(PropertyType attributeBeforeUpgrade, PropertyType updatedAttribute) {
 
         Assert.assertNotNull("updatedAttribute.id should not be null", updatedAttribute.getId());
 
@@ -109,7 +109,7 @@ public class AttributeHelper {
         Assert.assertEquals("updatedAttribute.version should be " + versionIncrementedInCreateAttribute,
                 versionIncrementedInCreateAttribute, (int) updatedAttribute.getVersion());
 
-        Attribute listedAttribute = facade.findAttributeById(attributeBeforeUpgrade.getId());
+        PropertyType listedAttribute = facade.findAttributeById(attributeBeforeUpgrade.getId());
         Assert.assertEquals("listedAttribute should be to updatedAttribute", updatedAttribute, listedAttribute);
 
         Assert.assertFalse("listedAttribute should be to createdAttribute",

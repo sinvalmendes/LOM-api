@@ -1,9 +1,9 @@
-package com.nanuvem.lom.api.accountability;
+package com.nanuvem.lom.api;
 
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class Attribute implements Serializable {
+public class PropertyType implements Serializable {
 
     public final static String MAXVALUE_CONFIGURATION_NAME = "maxvalue";
     public final static String MINVALUE_CONFIGURATION_NAME = "minvalue";
@@ -29,7 +29,7 @@ public class Attribute implements Serializable {
 
     private String configuration;
 
-    private Entity entity;
+    private EntityType entityType;
 
     @Override
     public int hashCode() {
@@ -52,7 +52,7 @@ public class Attribute implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Attribute other = (Attribute) obj;
+        PropertyType other = (PropertyType) obj;
         if (configuration == null) {
             if (other.configuration != null)
                 return false;
@@ -131,12 +131,12 @@ public class Attribute implements Serializable {
         this.configuration = configuration;
     }
 
-    public Entity getEntity() {
-        return entity;
+    public EntityType getEntity() {
+        return entityType;
     }
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
+    public void setEntity(EntityType entityType) {
+        this.entityType = entityType;
     }
 
     @Override

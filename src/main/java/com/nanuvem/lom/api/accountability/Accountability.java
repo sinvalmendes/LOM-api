@@ -4,11 +4,16 @@ public class Accountability {
 
     private Long id;
     private Integer version;
+<<<<<<< HEAD
     private Instance parent;
     private Instance child;
+=======
+    private Entity parent;
+    private Entity child;
+>>>>>>> 62c3c42a8a2b3ab25ffbf87098dfa6f9877f925a
     private AccountabilityType accountabilityType;
 
-    public Accountability(Instance parent, Instance child, AccountabilityType accountabilityType) {
+    public Accountability(Entity parent, Entity child, AccountabilityType accountabilityType) {
         this.parent = parent;
         this.parent.addChildAccountability(this);
         this.child = child;
@@ -32,14 +37,18 @@ public class Accountability {
         this.version = version;
     }
 
+<<<<<<< HEAD
     public static Accountability create(Instance parent, Instance child, AccountabilityType accountabilityType) {
+=======
+    public static Accountability create(Entity parent, Entity child, AccountabilityType accountabilityType) {
+>>>>>>> 62c3c42a8a2b3ab25ffbf87098dfa6f9877f925a
         if (!canCreate(parent, child, accountabilityType))
             throw new IllegalArgumentException("Invalid Accountability");
         else
             return new Accountability(parent, child, accountabilityType);
     }
 
-    public static boolean canCreate(Instance parent, Instance child, AccountabilityType accountabilityType) {
+    public static boolean canCreate(Entity parent, Entity child, AccountabilityType accountabilityType) {
         if (parent.equals(child))
             return false;
         if (parent.ancestorsInclude(child, accountabilityType))
@@ -47,19 +56,19 @@ public class Accountability {
         return true;
     }
 
-    public Instance getParent() {
+    public Entity getParent() {
         return parent;
     }
 
-    public void setParent(Instance parent) {
+    public void setParent(Entity parent) {
         this.parent = parent;
     }
 
-    public Instance getChild() {
+    public Entity getChild() {
         return child;
     }
 
-    public void setChild(Instance child) {
+    public void setChild(Entity child) {
         this.child = child;
     }
 

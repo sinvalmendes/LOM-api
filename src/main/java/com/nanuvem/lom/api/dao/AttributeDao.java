@@ -1,15 +1,15 @@
 package com.nanuvem.lom.api.dao;
 
-import com.nanuvem.lom.api.Attribute;
+import com.nanuvem.lom.api.PropertyType;
 
 public interface AttributeDao {
 
-    Attribute create(Attribute attribute);
+    PropertyType create(PropertyType propertyType);
 
-    Attribute findAttributeById(Long id);
+    PropertyType findAttributeById(Long id);
 
-    Attribute findAttributeByNameAndEntityFullName(String nameAttribute, String classFullName);
+    PropertyType findAttributeByNameAndEntityFullName(String nameAttribute, String classFullName);
 
-    Attribute update(Attribute attribute);
+    PropertyType update(PropertyType propertyType);
 
 }

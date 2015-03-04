@@ -2,15 +2,15 @@ package com.nanuvem.lom.api.accountability;
 
 import java.io.Serializable;
 
-public class AttributeValue implements Serializable {
+public class Property implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
     private Integer version;
 
-    private Instance instance;
-    private Attribute attribute;
+    private Entity entity;
+    private PropertyType propertyType;
     private String value;
 
     public Long getId() {
@@ -29,20 +29,20 @@ public class AttributeValue implements Serializable {
         this.version = version;
     }
 
-    public Attribute getAttribute() {
-        return attribute;
+    public PropertyType getAttribute() {
+        return propertyType;
     }
 
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
+    public void setAttribute(PropertyType propertyType) {
+        this.propertyType = propertyType;
     }
 
-    public Instance getInstance() {
-        return instance;
+    public Entity getInstance() {
+        return entity;
     }
 
-    public void setInstance(Instance instance) {
-        this.instance = instance;
+    public void setInstance(Entity entity) {
+        this.entity = entity;
     }
 
     public String getValue() {
@@ -61,21 +61,21 @@ public class AttributeValue implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        AttributeValue other = (AttributeValue) obj;
-        if (attribute == null) {
-            if (other.attribute != null)
+        Property other = (Property) obj;
+        if (propertyType == null) {
+            if (other.propertyType != null)
                 return false;
-        } else if (!attribute.equals(other.attribute))
+        } else if (!propertyType.equals(other.propertyType))
             return false;
         if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (instance == null) {
-            if (other.instance != null)
+        if (entity == null) {
+            if (other.entity != null)
                 return false;
-        } else if (!instance.equals(other.instance))
+        } else if (!entity.equals(other.entity))
             return false;
         if (value == null) {
             if (other.value != null)
@@ -94,9 +94,9 @@ public class AttributeValue implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((attribute == null) ? 0 : attribute.hashCode());
+        result = prime * result + ((propertyType == null) ? 0 : propertyType.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((instance == null) ? 0 : instance.hashCode());
+        result = prime * result + ((entity == null) ? 0 : entity.hashCode());
         result = prime * result + ((value == null) ? 0 : value.hashCode());
         result = prime * result + ((version == null) ? 0 : version.hashCode());
         return result;
