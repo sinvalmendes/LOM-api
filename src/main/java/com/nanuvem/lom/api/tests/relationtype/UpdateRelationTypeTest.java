@@ -9,8 +9,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.nanuvem.lom.api.Cardinality;
-import com.nanuvem.lom.api.EntityType;
 import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.Instance;
 import com.nanuvem.lom.api.MetadataException;
 import com.nanuvem.lom.api.Relation;
 import com.nanuvem.lom.api.RelationType;
@@ -27,25 +27,25 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void changeSourceType() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
-        EntityType anotherSourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "AnotherSourceEntity");
-        relationType.setSourceEntityType(anotherSourceEntity);
+        Entity anotherSourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "AnotherSourceEntity");
+        relationType.setSourceEntity(anotherSourceEntity);
         RelationType relationTypeUpdated = facade.update(relationType);
-        Assert.assertEquals(relationTypeUpdated.getSourceEntityType(), anotherSourceEntity);
+        Assert.assertEquals(relationTypeUpdated.getSourceEntity(), anotherSourceEntity);
         Assert.assertEquals(1, relationTypeUpdated.getVersion().intValue());
     }
 
     @Test
     public void getsExceptionWhenUpdateARelationTypeWithANonExistentSourceEntity() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
-        EntityType anotherSourceEntity = new EntityType();
-        relationType.setSourceEntityType(anotherSourceEntity);
+        Entity anotherSourceEntity = new Entity();
+        relationType.setSourceEntity(anotherSourceEntity);
         try {
             facade.update(relationType);
             Assert.fail();
@@ -56,12 +56,12 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void changeTargetType() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
-        EntityType anotherTargetEntity = new EntityType();
-        relationType.setTargetEntityType(anotherTargetEntity);
+        Entity anotherTargetEntity = new Entity();
+        relationType.setTargetEntity(anotherTargetEntity);
         try {
             facade.update(relationType);
             Assert.fail();
@@ -72,8 +72,8 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void updateForAValidReverseName() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, true,
                 "ReverseName");
         String newReverseName = "NewReverseName";
@@ -85,8 +85,8 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenTriesToUpdateReverseNameWithNullValue() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, true,
                 "ReverseName");
         relationType.setReverseName(null);
@@ -101,8 +101,8 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void changeIsBidirectionalFromTrueToFalseShouldChangeReverseNameToNull() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, true,
                 "ReverseName");
         relationType.setBidirectional(false);
@@ -113,8 +113,8 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenTriesToChangeIsBidirectionalFromFalseToTrueWithoutReverseName() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         relationType.setBidirectional(true);
@@ -144,16 +144,16 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void updateAnOneToOneRelationTypeToOneToMany() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.ONE,
                 Cardinality.ONE, false, null);
         String[] args = new String[0];
-        Entity source = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target = InstanceHelper.createOneInstance(targetEntity, args);
 
         Relation relation1 = RelationHelper.createRelation(relationType, source, target);
-        Entity target2 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target2 = InstanceHelper.createOneInstance(targetEntity, args);
 
         try {
             RelationHelper.createRelation(relationType, source, target2);
@@ -176,17 +176,17 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void updateAnOneToManyRelationTypeToOneToOne() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.ONE,
                 Cardinality.MANY, false, null);
         String[] args = new String[0];
-        Entity source1 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity source2 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target1 = InstanceHelper.createOneInstance(targetEntity, args);
-        Entity target2 = InstanceHelper.createOneInstance(targetEntity, args);
-        Entity target3 = InstanceHelper.createOneInstance(targetEntity, args);
-        Entity target4 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source1 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance source2 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target1 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target2 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target3 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target4 = InstanceHelper.createOneInstance(targetEntity, args);
 
         Relation relation1 = RelationHelper.createRelation(relationType, source1, target1);
         Relation relation2 = RelationHelper.createRelation(relationType, source1, target2);
@@ -209,15 +209,15 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void updateAOneToManyRelationTypeToManyToMany() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.ONE,
                 Cardinality.MANY, false, null);
         String[] args = new String[0];
-        Entity source1 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity source2 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target1 = InstanceHelper.createOneInstance(targetEntity, args);
-        Entity target2 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source1 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance source2 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target1 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target2 = InstanceHelper.createOneInstance(targetEntity, args);
 
         Relation relation1 = RelationHelper.createRelation(relationType, source1, target1);
         Relation relation2 = RelationHelper.createRelation(relationType, source1, target2);
@@ -245,15 +245,15 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void updateAManyToManyRelationTypeToOneToMany() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.MANY,
                 Cardinality.MANY, false, null);
         String[] args = new String[0];
-        Entity source1 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity source2 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target1 = InstanceHelper.createOneInstance(targetEntity, args);
-        Entity target2 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source1 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance source2 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target1 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target2 = InstanceHelper.createOneInstance(targetEntity, args);
 
         Relation relation1 = RelationHelper.createRelation(relationType, source1, target1);
         Relation relation2 = RelationHelper.createRelation(relationType, source1, target2);
@@ -277,17 +277,17 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void updateAnOneToOneRelationTypeToManyToMany() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.ONE,
                 Cardinality.ONE, false, null);
         String[] args = new String[0];
-        Entity source1 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target1 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source1 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target1 = InstanceHelper.createOneInstance(targetEntity, args);
         Relation relation1 = RelationHelper.createRelation(relationType, source1, target1);
 
-        Entity source2 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target2 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source2 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target2 = InstanceHelper.createOneInstance(targetEntity, args);
 
         try {
             RelationHelper.createRelation(relationType, source1, target2);
@@ -317,16 +317,16 @@ public abstract class UpdateRelationTypeTest extends LomTestCase {
 
     @Test
     public void updateAManyToManyRelationTypeToOneToOne() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.MANY,
                 Cardinality.MANY, false, null);
         String[] args = new String[0];
-        Entity source1 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target1 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source1 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target1 = InstanceHelper.createOneInstance(targetEntity, args);
 
-        Entity source2 = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target2 = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source2 = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target2 = InstanceHelper.createOneInstance(targetEntity, args);
         Relation relation1 = RelationHelper.createRelation(relationType, source1, target1);
         Relation relation2 = RelationHelper.createRelation(relationType, source1, target2);
         Relation relation3 = RelationHelper.createRelation(relationType, source2, target1);

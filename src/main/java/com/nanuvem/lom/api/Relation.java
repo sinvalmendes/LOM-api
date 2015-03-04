@@ -5,8 +5,8 @@ public class Relation {
     private Long id;
     private Integer version;
     private RelationType relationType;
-    private Entity source;
-    private Entity target;
+    private Instance source;
+    private Instance target;
 
     public Long getId() {
         return id;
@@ -32,19 +32,19 @@ public class Relation {
         this.relationType = relationType;
     }
 
-    public Entity getSource() {
+    public Instance getSource() {
         return source;
     }
 
-    public void setSource(Entity source) {
+    public void setSource(Instance source) {
         this.source = source;
     }
 
-    public Entity getTarget() {
+    public Instance getTarget() {
         return target;
     }
 
-    public void setTarget(Entity target) {
+    public void setTarget(Instance target) {
         this.target = target;
     }
 }

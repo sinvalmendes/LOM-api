@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Assert;
 
-import com.nanuvem.lom.api.EntityType;
+import com.nanuvem.lom.api.Entity;
 import com.nanuvem.lom.api.Facade;
 import com.nanuvem.lom.api.MetadataException;
 
@@ -14,12 +14,12 @@ public class EntityHelper {
 
     private static Facade facade;
 
-    public static EntityType createEntity(String namespace, String name) {
-        EntityType entityType = new EntityType();
-        entityType.setName(name);
-        entityType.setNamespace(namespace);
-        entityType = facade.create(entityType);
-        return entityType;
+    public static Entity createEntity(String namespace, String name) {
+        Entity entity = new Entity();
+        entity.setName(name);
+        entity.setNamespace(namespace);
+        entity = facade.create(entity);
+        return entity;
     }
 
     public static void expectExceptionOnInvalidFindEntityByFullName(String fullName, String expectedMessage) {
@@ -41,13 +41,13 @@ public class EntityHelper {
         }
     }
 
-    public static void expectExceptionOnInvalidEntityUpdate(EntityType entityType, String secondnamespace, String secondname,
+    public static void expectExceptionOnInvalidEntityUpdate(Entity entity, String secondnamespace, String secondname,
             String expectedMessage, String... args) {
 
         try {
-            entityType.setNamespace(secondnamespace);
-            entityType.setName(secondname);
-            facade.update(entityType);
+            entity.setNamespace(secondnamespace);
+            entity.setName(secondname);
+            facade.update(entity);
             fail();
         } catch (MetadataException e) {
             String formatedMessage = String.format(expectedMessage, (Object[]) args);
@@ -69,38 +69,38 @@ public class EntityHelper {
     public static void createUpdateAndVerifyOneEntity(String firstNamespace, String firstName, String secondNamespace,
             String secondName) {
 
-        EntityType entityType = new EntityType();
-        entityType.setNamespace(firstNamespace);
-        entityType.setName(firstName);
-        entityType = facade.create(entityType);
+        Entity entity = new Entity();
+        entity.setNamespace(firstNamespace);
+        entity.setName(firstName);
+        entity = facade.create(entity);
 
-        Assert.assertNotNull(entityType.getId());
-        Assert.assertEquals((Integer) 0, entityType.getVersion());
+        Assert.assertNotNull(entity.getId());
+        Assert.assertEquals((Integer) 0, entity.getVersion());
 
-        EntityType updateEntity = new EntityType();
+        Entity updateEntity = new Entity();
         updateEntity.setNamespace("secondNamespace");
         updateEntity.setName("secondName");
-        updateEntity.setId(entityType.getId());
-        updateEntity.setVersion(entityType.getVersion() + 1);
+        updateEntity.setId(entity.getId());
+        updateEntity.setVersion(entity.getVersion() + 1);
 
-        EntityType entity1 = facade.update(updateEntity);
+        Entity entity1 = facade.update(updateEntity);
 
-        List<EntityType> allEntities = facade.listAllEntities();
-        EntityType entityFound = allEntities.get(0);
+        List<Entity> allEntities = facade.listAllEntities();
+        Entity entityFound = allEntities.get(0);
 
         Assert.assertEquals((Integer) 1, entity1.getVersion());
-        Assert.assertNotSame(entityType, entityFound);
-        facade.deleteEntity(entityType.getId());
+        Assert.assertNotSame(entity, entityFound);
+        facade.deleteEntity(entity.getId());
     }
 
     public static void createAndVerifyTwoEntities(String entity1namespace, String entity1name, String entity2namespace,
             String entity2name) {
-        EntityType entity1 = new EntityType();
+        Entity entity1 = new Entity();
         entity1.setNamespace(entity1namespace);
         entity1.setName(entity1name);
         entity1 = facade.create(entity1);
 
-        EntityType entity2 = new EntityType();
+        Entity entity2 = new Entity();
         entity2.setNamespace(entity2namespace);
         entity2.setName(entity2name);
         entity2 = facade.create(entity2);
@@ -111,40 +111,40 @@ public class EntityHelper {
         Assert.assertEquals((Integer) 0, entity1.getVersion());
         Assert.assertEquals((Integer) 0, entity2.getVersion());
 
-        List<EntityType> entityTypes = facade.listAllEntities();
-        Assert.assertEquals(2, entityTypes.size());
-        Assert.assertEquals(entity1, entityTypes.get(0));
-        Assert.assertEquals(entity2, entityTypes.get(1));
+        List<Entity> entities = facade.listAllEntities();
+        Assert.assertEquals(2, entities.size());
+        Assert.assertEquals(entity1, entities.get(0));
+        Assert.assertEquals(entity2, entities.get(1));
 
         facade.deleteEntity(entity1.getId());
         facade.deleteEntity(entity2.getId());
     }
 
-    public static EntityType createAndSaveOneEntity(String namespace, String name) {
-        EntityType entityType = new EntityType();
-        entityType.setNamespace(namespace);
-        entityType.setName(name);
-        entityType = facade.create(entityType);
+    public static Entity createAndSaveOneEntity(String namespace, String name) {
+        Entity entity = new Entity();
+        entity.setNamespace(namespace);
+        entity.setName(name);
+        entity = facade.create(entity);
 
-        Assert.assertNotNull(entityType.getId());
-        Assert.assertEquals((Integer) 0, entityType.getVersion());
-        return entityType;
+        Assert.assertNotNull(entity.getId());
+        Assert.assertEquals((Integer) 0, entity.getVersion());
+        return entity;
     }
 
     public static void createAndVerifyOneEntity(String namespace, String name) {
-        EntityType entityType = new EntityType();
-        entityType.setNamespace(namespace);
-        entityType.setName(name);
-        entityType = facade.create(entityType);
+        Entity entity = new Entity();
+        entity.setNamespace(namespace);
+        entity.setName(name);
+        entity = facade.create(entity);
 
-        Assert.assertNotNull(entityType.getId());
-        Assert.assertEquals((Integer) 0, entityType.getVersion());
+        Assert.assertNotNull(entity.getId());
+        Assert.assertEquals((Integer) 0, entity.getVersion());
 
-        List<EntityType> entityTypes = facade.listAllEntities();
-        Assert.assertEquals(1, entityTypes.size());
-        Assert.assertEquals(entityType, entityTypes.get(0));
+        List<Entity> entities = facade.listAllEntities();
+        Assert.assertEquals(1, entities.size());
+        Assert.assertEquals(entity, entities.get(0));
 
-        facade.deleteEntity(entityType.getId());
+        facade.deleteEntity(entity.getId());
     }
 
     public static void setFacade(Facade facade) {

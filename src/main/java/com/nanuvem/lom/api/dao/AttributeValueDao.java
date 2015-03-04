@@ -1,9 +1,9 @@
 package com.nanuvem.lom.api.dao;
 
-import com.nanuvem.lom.api.Property;
+import com.nanuvem.lom.api.AttributeValue;
 
 public interface AttributeValueDao {
 
-    Property create(Property value);
+    AttributeValue create(AttributeValue value);
 
 }

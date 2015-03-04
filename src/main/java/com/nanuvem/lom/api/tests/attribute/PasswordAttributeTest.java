@@ -12,7 +12,7 @@ import static com.nanuvem.lom.api.tests.entity.EntityHelper.createEntity;
 
 import org.junit.Test;
 
-import com.nanuvem.lom.api.PropertyType;
+import com.nanuvem.lom.api.Attribute;
 import com.nanuvem.lom.api.tests.LomTestCase;
 
 public abstract class PasswordAttributeTest extends LomTestCase {
@@ -166,29 +166,29 @@ public abstract class PasswordAttributeTest extends LomTestCase {
     public void validChangeConfigurationForPasswordAttributeType() {
         createEntity("abc", "a");
 
-        PropertyType createdAttribute1 = createOneAttribute("abc.a", null, "pa", PASSWORD, MANDATORY_TRUE);
-        PropertyType createdAttribute2 = createOneAttribute("abc.a", null, "pb", PASSWORD, PASSWORD_CONFIGURATION_COMPLETE);
+        Attribute createdAttribute1 = createOneAttribute("abc.a", null, "pa", PASSWORD, MANDATORY_TRUE);
+        Attribute createdAttribute2 = createOneAttribute("abc.a", null, "pb", PASSWORD, PASSWORD_CONFIGURATION_COMPLETE);
 
-        PropertyType updatedAttribute11 = updateAttribute("abc.a", createdAttribute1, 1, "pa", PASSWORD,
+        Attribute updatedAttribute11 = updateAttribute("abc.a", createdAttribute1, 1, "pa", PASSWORD,
                 PASSWORD_CONFIGURATION_PARTIAL);
         verifyUpdatedAttribute(createdAttribute1, updatedAttribute11);
 
-        PropertyType updatedAttribute12 = updateAttribute("abc.a", updatedAttribute11, 1, "pa", PASSWORD,
+        Attribute updatedAttribute12 = updateAttribute("abc.a", updatedAttribute11, 1, "pa", PASSWORD,
                 PASSWORD_CONFIGURATION_COMPLETE);
         verifyUpdatedAttribute(updatedAttribute11, updatedAttribute12);
 
-        PropertyType updatedAttribute21 = updateAttribute("abc.a", createdAttribute2, 2, "pb", PASSWORD,
+        Attribute updatedAttribute21 = updateAttribute("abc.a", createdAttribute2, 2, "pb", PASSWORD,
                 PASSWORD_CONFIGURATION_PARTIAL);
         verifyUpdatedAttribute(createdAttribute2, updatedAttribute21);
 
-        PropertyType updatedAttribute22 = updateAttribute("abc.a", updatedAttribute21, 2, "pb", PASSWORD, MANDATORY_TRUE);
+        Attribute updatedAttribute22 = updateAttribute("abc.a", updatedAttribute21, 2, "pb", PASSWORD, MANDATORY_TRUE);
         verifyUpdatedAttribute(updatedAttribute21, updatedAttribute22);
 
-        PropertyType updatedAttribute23 = updateAttribute("abc.a", updatedAttribute22, 2, "pb", PASSWORD,
+        Attribute updatedAttribute23 = updateAttribute("abc.a", updatedAttribute22, 2, "pb", PASSWORD,
                 "{\"default\":\"abc\"}");
         verifyUpdatedAttribute(updatedAttribute22, updatedAttribute23);
 
-        PropertyType updatedAttribute24 = updateAttribute("abc.a", updatedAttribute23, 2, "pb", PASSWORD,
+        Attribute updatedAttribute24 = updateAttribute("abc.a", updatedAttribute23, 2, "pb", PASSWORD,
                 "{\"default\":\"123\"}");
         verifyUpdatedAttribute(updatedAttribute23, updatedAttribute24);
     }
@@ -196,7 +196,7 @@ public abstract class PasswordAttributeTest extends LomTestCase {
     @Test
     public void invalidChangeConfigurationForPaswordAttributeType() {
         createEntity("abc", "a");
-        PropertyType createdAttribute = createOneAttribute("abc.a", null, "pa", PASSWORD, null);
+        Attribute createdAttribute = createOneAttribute("abc.a", null, "pa", PASSWORD, null);
 
         expectExceptionOnUpdateInvalidAttribute("abc.a", createdAttribute, 1, "pa", PASSWORD, "{\"mandatory\":10}",
                 "Invalid configuration for attribute pa: the mandatory value must be true or false literals");

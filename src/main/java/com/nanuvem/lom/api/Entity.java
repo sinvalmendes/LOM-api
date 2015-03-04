@@ -10,8 +10,9 @@ public class Entity implements Serializable {
 
     private Long id;
     private Integer version;
-    private EntityType entityType;
-    private List<Property> values = new LinkedList<Property>();
+    private String name;
+    private String namespace;
+    private List<Attribute> attributes = new LinkedList<Attribute>();
 
     public Long getId() {
         return id;
@@ -19,14 +20,6 @@ public class Entity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<Property> getValues() {
-        return values;
-    }
-
-    public void setValues(List<Property> values) {
-        this.values = values;
     }
 
     public Integer getVersion() {
@@ -37,21 +30,46 @@ public class Entity implements Serializable {
         this.version = version;
     }
 
-    public EntityType getEntity() {
-        return entityType;
+    public String getName() {
+        return name;
     }
 
-    public void setEntity(EntityType entityType) {
-        this.entityType = entityType;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+
+        this.namespace = (namespace == null) ? "" : namespace;
+    }
+
+    public String getFullName() {
+        String fullName = "";
+        if (this.namespace != null && !this.namespace.isEmpty()) {
+            fullName = this.namespace + ".";
+        }
+        return fullName + this.getName();
+    }
+
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((entityType == null) ? 0 : entityType.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((version == null) ? 0 : version.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((namespace == null) ? 0 : namespace.hashCode());
         return result;
     }
 
@@ -64,27 +82,27 @@ public class Entity implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Entity other = (Entity) obj;
-        if (entityType == null) {
-            if (other.entityType != null)
-                return false;
-        } else if (!entityType.equals(other.entityType))
-            return false;
         if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (version == null) {
-            if (other.version != null)
+        if (name == null) {
+            if (other.name != null)
                 return false;
-        } else if (!version.equals(other.version))
+        } else if (!name.equals(other.name))
+            return false;
+        if (namespace == null) {
+            if (other.namespace != null)
+                return false;
+        } else if (!namespace.equals(other.namespace))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Instance [id=" + id + ", version=" + version + ", values=" + values + "]";
+        return "Entity [namespace=" + namespace + ", name=" + name + ", id=" + id + ", version=" + version + "]";
     }
 
 }

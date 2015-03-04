@@ -5,7 +5,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.nanuvem.lom.api.EntityType;
+import com.nanuvem.lom.api.Entity;
 import com.nanuvem.lom.api.RelationType;
 import com.nanuvem.lom.api.tests.LomTestCase;
 import com.nanuvem.lom.api.tests.entity.EntityHelper;
@@ -14,8 +14,8 @@ public abstract class DeleteRelationTypeTest extends LomTestCase {
 
     @Test
     public void deleteRelationType() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         Assert.assertEquals(1, facade.listAllRelationTypes().size());

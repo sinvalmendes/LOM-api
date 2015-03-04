@@ -6,7 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.nanuvem.lom.api.PropertyType;
+import com.nanuvem.lom.api.Attribute;
 import com.nanuvem.lom.api.tests.LomTestCase;
 
 public abstract class AttributeTest extends LomTestCase {
@@ -107,16 +107,16 @@ public abstract class AttributeTest extends LomTestCase {
     @Test
     public void validNewName() {
         createEntity("abc", "a");
-        PropertyType createdAttribute = createOneAttribute("abc.a", null, "pa", LONGTEXT, null);
+        Attribute createdAttribute = createOneAttribute("abc.a", null, "pa", LONGTEXT, null);
 
-        PropertyType updatedAttribute = updateAttribute("abc.a", createdAttribute, 1, "pb", LONGTEXT, null);
+        Attribute updatedAttribute = updateAttribute("abc.a", createdAttribute, 1, "pb", LONGTEXT, null);
         verifyUpdatedAttribute(createdAttribute, updatedAttribute);
     }
 
     @Test
     public void invalidNewName() {
         createEntity("abc", "a");
-        PropertyType createdAttribute = createOneAttribute("abc.a", null, "pa", LONGTEXT, null);
+        Attribute createdAttribute = createOneAttribute("abc.a", null, "pa", LONGTEXT, null);
         expectExceptionOnUpdateWithInvalidNewName(createdAttribute, "", "The name of an Attribute is mandatory");
         expectExceptionOnUpdateWithInvalidNewName(createdAttribute, null, "The name of an Attribute is mandatory");
         expectExceptionOnUpdateWithInvalidNewName(createdAttribute, "p a", "Invalid value for Attribute name: p a");
@@ -133,16 +133,16 @@ public abstract class AttributeTest extends LomTestCase {
     @Test
     public void validNewSequence() {
         createEntity("abc", "a");
-        PropertyType createdAttribute1 = createOneAttribute("abc.a", null, "pa", TEXT, null);
-        PropertyType createdAttribute2 = createOneAttribute("abc.a", null, "pb", TEXT, null);
+        Attribute createdAttribute1 = createOneAttribute("abc.a", null, "pa", TEXT, null);
+        Attribute createdAttribute2 = createOneAttribute("abc.a", null, "pb", TEXT, null);
 
-        PropertyType updatedAttribute1 = updateAttribute("abc.a", createdAttribute1, 2, "pa", TEXT, null);
+        Attribute updatedAttribute1 = updateAttribute("abc.a", createdAttribute1, 2, "pa", TEXT, null);
         verifyUpdatedAttribute(createdAttribute1, updatedAttribute1);
 
-        PropertyType updatedAttribute2 = updateAttribute("abc.a", createdAttribute2, 2, "pb", TEXT, null);
+        Attribute updatedAttribute2 = updateAttribute("abc.a", createdAttribute2, 2, "pb", TEXT, null);
         verifyUpdatedAttribute(createdAttribute2, updatedAttribute2);
 
-        PropertyType updatedAttribute3 = updateAttribute("abc.a", updatedAttribute2, 1, "pb", TEXT, null);
+        Attribute updatedAttribute3 = updateAttribute("abc.a", updatedAttribute2, 1, "pb", TEXT, null);
         verifyUpdatedAttribute(updatedAttribute2, updatedAttribute3);
     }
 
@@ -150,7 +150,7 @@ public abstract class AttributeTest extends LomTestCase {
     public void invalidNewSequence() {
         createEntity("abc", "a");
 
-        PropertyType createdAttribute = createOneAttribute("abc.a", null, "pa", TEXT, null);
+        Attribute createdAttribute = createOneAttribute("abc.a", null, "pa", TEXT, null);
 
         createOneAttribute("abc.a", null, "pb", TEXT, null);
 
@@ -167,7 +167,7 @@ public abstract class AttributeTest extends LomTestCase {
     @Test
     public void changeType() {
         createEntity("abc", "a");
-        PropertyType createdAttribute = createOneAttribute("abc.a", null, "pa", TEXT, null);
+        Attribute createdAttribute = createOneAttribute("abc.a", null, "pa", TEXT, null);
 
         expectExceptionOnUpdateInvalidAttribute("abc.a", createdAttribute, 1, "pa", null, null,
                 "Can not change the type of an attribute");
@@ -182,10 +182,10 @@ public abstract class AttributeTest extends LomTestCase {
 
         createOneAttribute("abc.a", null, "pa", TEXT, null);
 
-        PropertyType createdAttribute2 = createOneAttribute("abc.b", null, "pb", TEXT, null);
-        PropertyType createdAttribute3 = createOneAttribute("abc.a", null, "pc", TEXT, null);
+        Attribute createdAttribute2 = createOneAttribute("abc.b", null, "pb", TEXT, null);
+        Attribute createdAttribute3 = createOneAttribute("abc.a", null, "pc", TEXT, null);
 
-        PropertyType updatedAttribute2 = updateAttribute("abc.b", createdAttribute2, 1, "pa", TEXT, null);
+        Attribute updatedAttribute2 = updateAttribute("abc.b", createdAttribute2, 1, "pa", TEXT, null);
         verifyUpdatedAttribute(createdAttribute2, updatedAttribute2);
 
         expectExceptionOnUpdateInvalidAttribute("abc.a", createdAttribute3, 1, "pa", TEXT, null,
@@ -202,18 +202,18 @@ public abstract class AttributeTest extends LomTestCase {
     public void genericChangeConfiguration() {
         createEntity("abc", "a");
 
-        PropertyType createdAttribute1 = createOneAttribute("abc.a", null, "pa", TEXT, MANDATORY_TRUE);
+        Attribute createdAttribute1 = createOneAttribute("abc.a", null, "pa", TEXT, MANDATORY_TRUE);
 
-        PropertyType createdAttribute2 = createOneAttribute("abc.a", null, "pb", TEXT, null);
+        Attribute createdAttribute2 = createOneAttribute("abc.a", null, "pb", TEXT, null);
 
-        PropertyType updatedAttribute11 = updateAttribute("abc.a", createdAttribute1, 1, "pa", TEXT,
+        Attribute updatedAttribute11 = updateAttribute("abc.a", createdAttribute1, 1, "pa", TEXT,
                 "{\"mandatory\":false}");
         verifyUpdatedAttribute(createdAttribute1, updatedAttribute11);
 
-        PropertyType updatedAttribute12 = updateAttribute("abc.a", updatedAttribute11, 2, "pa", TEXT, null);
+        Attribute updatedAttribute12 = updateAttribute("abc.a", updatedAttribute11, 2, "pa", TEXT, null);
         verifyUpdatedAttribute(updatedAttribute11, updatedAttribute12);
 
-        PropertyType updatedAttribute2 = updateAttribute("abc.a", createdAttribute2, 2, "pb", TEXT, MANDATORY_TRUE);
+        Attribute updatedAttribute2 = updateAttribute("abc.a", createdAttribute2, 2, "pb", TEXT, MANDATORY_TRUE);
         verifyUpdatedAttribute(createdAttribute2, updatedAttribute2);
     }
 

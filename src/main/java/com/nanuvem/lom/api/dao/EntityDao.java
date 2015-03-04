@@ -2,21 +2,21 @@ package com.nanuvem.lom.api.dao;
 
 import java.util.List;
 
-import com.nanuvem.lom.api.EntityType;
+import com.nanuvem.lom.api.Entity;
 
 public interface EntityDao {
 
-    EntityType create(EntityType entityType);
+    Entity create(Entity entity);
 
-    List<EntityType> listAll();
+    List<Entity> listAll();
 
-    EntityType findById(Long id);
+    Entity findById(Long id);
 
-    List<EntityType> listByFullName(String fragment);
+    List<Entity> listByFullName(String fragment);
 
-    EntityType findByFullName(String fullName);
+    Entity findByFullName(String fullName);
 
-    EntityType update(EntityType entityType);
+    Entity update(Entity entity);
 
     void delete(Long id);
 }

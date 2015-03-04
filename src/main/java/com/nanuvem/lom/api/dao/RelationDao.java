@@ -2,7 +2,7 @@ package com.nanuvem.lom.api.dao;
 
 import java.util.List;
 
-import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.Instance;
 import com.nanuvem.lom.api.Relation;
 import com.nanuvem.lom.api.RelationType;
 
@@ -17,9 +17,9 @@ public interface RelationDao {
 
     void delete(Long id);
 
-    List<Relation> findRelationsBySourceInstance(Entity source, RelationType relationType);
+    List<Relation> findRelationsBySourceInstance(Instance source, RelationType relationType);
 
     List<Relation> findRelationsByRelationType(RelationType relationType);
 
-    List<Relation> findRelationsByTargetInstance(Entity targetInstance);
+    List<Relation> findRelationsByTargetInstance(Instance targetInstance);
 }

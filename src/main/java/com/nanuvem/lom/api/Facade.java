@@ -6,37 +6,37 @@ public interface Facade {
 
     // Entity
 
-    EntityType create(EntityType entityType);
+    Entity create(Entity entity);
 
-    EntityType findEntityById(Long id);
+    Entity findEntityById(Long id);
 
-    EntityType findEntityByFullName(String fullName);
+    Entity findEntityByFullName(String fullName);
 
-    List<EntityType> listAllEntities();
+    List<Entity> listAllEntities();
 
-    List<EntityType> listEntitiesByFullName(String fragment);
+    List<Entity> listEntitiesByFullName(String fragment);
 
-    EntityType update(EntityType entityType);
+    Entity update(Entity entity);
 
     void deleteEntity(Long id);
 
     // Attribute
 
-    PropertyType create(PropertyType propertyType);
+    Attribute create(Attribute attribute);
 
-    PropertyType findAttributeById(Long id);
+    Attribute findAttributeById(Long id);
 
-    PropertyType findAttributeByNameAndEntityFullName(String name, String fullEntityName);
+    Attribute findAttributeByNameAndEntityFullName(String name, String fullEntityName);
 
-    PropertyType update(PropertyType propertyType);
+    Attribute update(Attribute attribute);
 
     // Instance
 
-    Entity create(Entity entity);
+    Instance create(Instance instance);
 
-    Entity findInstanceById(Long id);
+    Instance findInstanceById(Long id);
 
-    List<Entity> findInstancesByEntityId(Long entityId);
+    List<Instance> findInstancesByEntityId(Long entityId);
 
     // RelationType
 
@@ -62,7 +62,7 @@ public interface Facade {
 
     void deleteRelation(Long id);
 
-    List<Relation> findRelationsBySourceInstance(Entity source, RelationType relationType);
+    List<Relation> findRelationsBySourceInstance(Instance source, RelationType relationType);
 
     List<Relation> findRelationsByRelationType(RelationType relationType);
 

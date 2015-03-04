@@ -5,7 +5,7 @@ import static com.nanuvem.lom.api.tests.entity.EntityHelper.createEntity;
 
 import org.junit.Test;
 
-import com.nanuvem.lom.api.PropertyType;
+import com.nanuvem.lom.api.Attribute;
 import com.nanuvem.lom.api.tests.LomTestCase;
 
 public abstract class LongTextAttributeTest extends LomTestCase {
@@ -67,29 +67,29 @@ public abstract class LongTextAttributeTest extends LomTestCase {
     public void validChangeConfigurationForLongTextAttributeType() {
         createEntity("abc", "a");
 
-        PropertyType createdAttribute1 = createOneAttribute("abc.a", null, "pa", LONGTEXT, MANDATORY_TRUE);
-        PropertyType createdAttribute2 = createOneAttribute("abc.a", null, "pb", LONGTEXT, LONGTEXT_CONFIGURATION_COMPLETE);
+        Attribute createdAttribute1 = createOneAttribute("abc.a", null, "pa", LONGTEXT, MANDATORY_TRUE);
+        Attribute createdAttribute2 = createOneAttribute("abc.a", null, "pb", LONGTEXT, LONGTEXT_CONFIGURATION_COMPLETE);
 
-        PropertyType updatedAttribute11 = updateAttribute("abc.a", createdAttribute1, 1, "pa", LONGTEXT,
+        Attribute updatedAttribute11 = updateAttribute("abc.a", createdAttribute1, 1, "pa", LONGTEXT,
                 LONGTEXT_CONFIGURATION_PARTIAL);
         verifyUpdatedAttribute(createdAttribute1, updatedAttribute11);
 
-        PropertyType updatedAttribute12 = updateAttribute("abc.a", updatedAttribute11, 1, "pa", LONGTEXT,
+        Attribute updatedAttribute12 = updateAttribute("abc.a", updatedAttribute11, 1, "pa", LONGTEXT,
                 LONGTEXT_CONFIGURATION_COMPLETE);
         verifyUpdatedAttribute(updatedAttribute11, updatedAttribute12);
 
-        PropertyType updatedAttribute21 = updateAttribute("abc.a", createdAttribute2, 2, "pb", LONGTEXT,
+        Attribute updatedAttribute21 = updateAttribute("abc.a", createdAttribute2, 2, "pb", LONGTEXT,
                 LONGTEXT_CONFIGURATION_PARTIAL);
         verifyUpdatedAttribute(createdAttribute2, updatedAttribute21);
 
-        PropertyType updatedAttribute22 = updateAttribute("abc.a", updatedAttribute21, 2, "pb", LONGTEXT, MANDATORY_TRUE);
+        Attribute updatedAttribute22 = updateAttribute("abc.a", updatedAttribute21, 2, "pb", LONGTEXT, MANDATORY_TRUE);
         verifyUpdatedAttribute(updatedAttribute21, updatedAttribute22);
 
-        PropertyType updatedAttribute23 = updateAttribute("abc.a", updatedAttribute22, 2, "pb", LONGTEXT,
+        Attribute updatedAttribute23 = updateAttribute("abc.a", updatedAttribute22, 2, "pb", LONGTEXT,
                 "{\"default\":\"abc\"}");
         verifyUpdatedAttribute(updatedAttribute22, updatedAttribute23);
 
-        PropertyType updatedAttribute24 = updateAttribute("abc.a", updatedAttribute23, 2, "pb", LONGTEXT,
+        Attribute updatedAttribute24 = updateAttribute("abc.a", updatedAttribute23, 2, "pb", LONGTEXT,
                 "{\"default\":\"123\"}");
         verifyUpdatedAttribute(updatedAttribute23, updatedAttribute24);
 
@@ -98,7 +98,7 @@ public abstract class LongTextAttributeTest extends LomTestCase {
     @Test
     public void invalidChangeConfigurationForLongTextAttributeType() {
         createEntity("abc", "a");
-        PropertyType createdAttribute = createOneAttribute("abc.a", null, "pa", LONGTEXT, null);
+        Attribute createdAttribute = createOneAttribute("abc.a", null, "pa", LONGTEXT, null);
 
         expectExceptionOnUpdateInvalidAttribute("abc.a", createdAttribute, 1, "pa", LONGTEXT, "{\"mandatory\":10}",
                 "Invalid configuration for attribute pa: the mandatory value must be true or false literals");

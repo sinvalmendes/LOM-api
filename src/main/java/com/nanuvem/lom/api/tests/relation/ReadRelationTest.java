@@ -8,8 +8,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.nanuvem.lom.api.EntityType;
 import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.Instance;
 import com.nanuvem.lom.api.Relation;
 import com.nanuvem.lom.api.RelationType;
 import com.nanuvem.lom.api.tests.LomTestCase;
@@ -20,13 +20,13 @@ public abstract class ReadRelationTest extends LomTestCase {
 
     @Test
     public void findRelationById() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         String[] args = new String[0];
-        Entity source = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target = InstanceHelper.createOneInstance(targetEntity, args);
 
         Relation relation = RelationHelper.createRelation(relationType, source, target);
         Relation foundRelation = facade.findRelationById(relation.getId());
@@ -35,13 +35,13 @@ public abstract class ReadRelationTest extends LomTestCase {
 
     @Test
     public void listAllRelations() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         String[] args = new String[0];
-        Entity source = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target = InstanceHelper.createOneInstance(targetEntity, args);
 
         Relation relation = RelationHelper.createRelation(relationType, source, target);
         List<Relation> allRelations = facade.listAllRelations();

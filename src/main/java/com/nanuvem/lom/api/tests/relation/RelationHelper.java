@@ -1,7 +1,7 @@
 package com.nanuvem.lom.api.tests.relation;
 
 import com.nanuvem.lom.api.Facade;
-import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.Instance;
 import com.nanuvem.lom.api.Relation;
 import com.nanuvem.lom.api.RelationType;
 
@@ -13,7 +13,7 @@ public class RelationHelper {
         RelationHelper.facade = facade;
     }
 
-    public static Relation createRelation(RelationType relationType, Entity source, Entity target) {
+    public static Relation createRelation(RelationType relationType, Instance source, Instance target) {
         Relation relation = new Relation();
         relation.setRelationType(relationType);
         relation.setSource(source);

@@ -2,17 +2,17 @@ package com.nanuvem.lom.api.dao;
 
 import java.util.List;
 
-import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.Instance;
 
 public interface InstanceDao {
 
-    Entity create(Entity entity);
+    Instance create(Instance instance);
 
-    Entity findInstanceById(Long id);
+    Instance findInstanceById(Long id);
 
-    List<Entity> findInstancesByEntityId(Long entityId);
+    List<Instance> findInstancesByEntityId(Long entityId);
 
-    Entity update(Entity entity);
+    Instance update(Instance instance);
 
     void delete(Long id);
 

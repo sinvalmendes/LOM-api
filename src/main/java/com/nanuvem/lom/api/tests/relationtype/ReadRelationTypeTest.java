@@ -5,7 +5,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.nanuvem.lom.api.EntityType;
+import com.nanuvem.lom.api.Entity;
 import com.nanuvem.lom.api.RelationType;
 import com.nanuvem.lom.api.tests.LomTestCase;
 import com.nanuvem.lom.api.tests.entity.EntityHelper;
@@ -14,8 +14,8 @@ public abstract class ReadRelationTypeTest extends LomTestCase {
 
     @Test
     public void listAllRelationTypes() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         Assert.assertEquals(0, facade.listAllRelationTypes().size());
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
@@ -26,8 +26,8 @@ public abstract class ReadRelationTypeTest extends LomTestCase {
 
     @Test
     public void findRelationTypeById() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         RelationType foundRelationType = facade.findRelationTypeById(relationType.getId());

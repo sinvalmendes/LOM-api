@@ -6,7 +6,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.nanuvem.lom.api.Cardinality;
-import com.nanuvem.lom.api.EntityType;
+import com.nanuvem.lom.api.Entity;
 import com.nanuvem.lom.api.MetadataException;
 import com.nanuvem.lom.api.RelationType;
 import com.nanuvem.lom.api.tests.LomTestCase;
@@ -16,8 +16,8 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void createRelationTypeWithStringName() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         Assert.assertEquals("RelationType", facade.findRelationTypeById(relationType.getId()).getName());
@@ -28,8 +28,8 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenCreateARelationTypeWithoutName() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         try {
             createRelationType(null, sourceEntity, targetEntity, null, null, false, null);
         } catch (MetadataException me) {
@@ -39,19 +39,19 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void createRelationTypeWithValidSourceAndTargetEntity() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, Cardinality.ONE,
                 Cardinality.ONE, false, null);
-        Assert.assertEquals(sourceEntity, relationType.getSourceEntityType());
-        Assert.assertEquals(targetEntity, relationType.getTargetEntityType());
+        Assert.assertEquals(sourceEntity, relationType.getSourceEntity());
+        Assert.assertEquals(targetEntity, relationType.getTargetEntity());
         Assert.assertEquals(relationType.getSourceCardinality(), Cardinality.ONE);
         Assert.assertEquals(relationType.getTargetCardinality(), Cardinality.ONE);
     }
 
     @Test
     public void getsExceptionWhenCreateARelationTypeWithoutSourceEntity() {
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         try {
             createRelationType("RelationType", null, targetEntity, null, null, false, null);
         } catch (MetadataException me) {
@@ -61,7 +61,7 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenCreateARelationTypeWithoutTargetEntity() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
         try {
             createRelationType("RelationType", sourceEntity, null, null, null, false, null);
         } catch (MetadataException me) {
@@ -71,8 +71,8 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void sourceCardinalityDefaultValueIsONE() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         Assert.assertEquals(relationType.getSourceCardinality(), Cardinality.ONE);
@@ -80,8 +80,8 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void targetCardinalityDefaultValueIsONE() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         Assert.assertEquals(relationType.getTargetCardinality(), Cardinality.ONE);
@@ -89,18 +89,18 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void bidirectionalDefaultValueIsFalse() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = new RelationType();
-        relationType.setSourceEntityType(sourceEntity);
-        relationType.setTargetEntityType(targetEntity);
+        relationType.setSourceEntity(sourceEntity);
+        relationType.setTargetEntity(targetEntity);
         Assert.assertFalse(relationType.isBidirectional());
     }
 
     @Test
     public void reverseNameShouldBeNullWhenBidirectionalIsFalse() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         Assert.assertNull(relationType.getReverseName());
@@ -110,8 +110,8 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void getsExceptionBecauseTheReverseNameIsMandatoryIfBidirectionalIsTrue() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         try {
             createRelationType("RelationType", sourceEntity, targetEntity, null, null, true, null);
         } catch (MetadataException me) {
@@ -121,8 +121,8 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void createABidirectionalRelationTypeWithReverseName() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, true,
                 "ReverseName");
         Assert.assertEquals(relationType.getSourceCardinality(), Cardinality.ONE);
@@ -132,8 +132,8 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenCreatesARelationTypeWithAReverseNameAndBidirectionalIsFalse() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         try {
             createRelationType("RelationType", sourceEntity, targetEntity, null, null, false, "ReverseName");
         } catch (MetadataException me) {
@@ -144,8 +144,8 @@ public abstract class CreateRelationTypeTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenSetAReverseNameOnANonBidirectionalRelationType() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         try {

@@ -5,8 +5,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.nanuvem.lom.api.EntityType;
 import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.Instance;
 import com.nanuvem.lom.api.MetadataException;
 import com.nanuvem.lom.api.Relation;
 import com.nanuvem.lom.api.RelationType;
@@ -18,13 +18,13 @@ public abstract class CreateRelationTest extends LomTestCase {
 
     @Test
     public void createValidRelation() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         String[] args = new String[0];
-        Entity source = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target = InstanceHelper.createOneInstance(targetEntity, args);
         Relation relation = RelationHelper.createRelation(relationType, source, target);
         Assert.assertNotNull(relation);
         Assert.assertEquals(1, relation.getId().intValue());
@@ -34,11 +34,11 @@ public abstract class CreateRelationTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenRelationTypeIsNull(){
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         String[] args = new String[0];
-        Entity source = InstanceHelper.createOneInstance(sourceEntity, args);
-        Entity target = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance target = InstanceHelper.createOneInstance(targetEntity, args);
         try {
             RelationHelper.createRelation(null, source, target);
             Assert.fail();
@@ -49,12 +49,12 @@ public abstract class CreateRelationTest extends LomTestCase {
     
     @Test
     public void getsExceptionWhenTriesToCreateARelationWithoutSourceInstance() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         String[] args = new String[0];
-        Entity target = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target = InstanceHelper.createOneInstance(targetEntity, args);
         try {
             RelationHelper.createRelation(relationType, null, target);
             Assert.fail();
@@ -65,12 +65,12 @@ public abstract class CreateRelationTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenTriesToCreateARelationWithoutTargetInstance() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         String[] args = new String[0];
-        Entity source = InstanceHelper.createOneInstance(sourceEntity, args);
+        Instance source = InstanceHelper.createOneInstance(sourceEntity, args);
         try {
             RelationHelper.createRelation(relationType, source, null);
             Assert.fail();
@@ -81,13 +81,13 @@ public abstract class CreateRelationTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenTriesToCreateARelationWithAnUnexistentSourceInstance() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         String[] args = new String[0];
-        Entity source = new Entity();
-        Entity target = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance source = new Instance();
+        Instance target = InstanceHelper.createOneInstance(targetEntity, args);
         try {
             RelationHelper.createRelation(relationType, source, target);
             Assert.fail();
@@ -98,13 +98,13 @@ public abstract class CreateRelationTest extends LomTestCase {
 
     @Test
     public void getsExceptionWhenTriesToCreateARelationWithAnUnexistentTargetInstance() {
-        EntityType sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
-        EntityType targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
+        Entity sourceEntity = EntityHelper.createAndSaveOneEntity("namespace", "SourceEntity");
+        Entity targetEntity = EntityHelper.createAndSaveOneEntity("namespace", "TargetEntity");
         RelationType relationType = createRelationType("RelationType", sourceEntity, targetEntity, null, null, false,
                 null);
         String[] args = new String[0];
-        Entity source = InstanceHelper.createOneInstance(targetEntity, args);
-        Entity target = new Entity();
+        Instance source = InstanceHelper.createOneInstance(targetEntity, args);
+        Instance target = new Instance();
         try {
             RelationHelper.createRelation(relationType, source, target);
             Assert.fail();
