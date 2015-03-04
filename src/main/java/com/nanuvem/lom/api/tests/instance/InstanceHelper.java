@@ -8,12 +8,12 @@ import junit.framework.Assert;
 
 import org.codehaus.jackson.JsonNode;
 
-import com.nanuvem.lom.api.Attribute;
+import com.nanuvem.lom.api.PropertyType;
 import com.nanuvem.lom.api.AttributeType;
-import com.nanuvem.lom.api.AttributeValue;
-import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.Property;
+import com.nanuvem.lom.api.EntityType;
 import com.nanuvem.lom.api.Facade;
-import com.nanuvem.lom.api.Instance;
+import com.nanuvem.lom.api.Entity;
 import com.nanuvem.lom.api.MetadataException;
 import com.nanuvem.lom.api.tests.attribute.AttributeHelper;
 import com.nanuvem.lom.api.util.JsonNodeUtil;
@@ -26,35 +26,35 @@ public class InstanceHelper {
         InstanceHelper.facade = facade;
     }
 
-    public static Instance createOneInstance(Entity entity, String... values) {
+    public static Entity createOneInstance(EntityType entityType, String... values) {
 
-        Instance instance = new Instance();
-        instance.setEntity(entity);
+        Entity entity = new Entity();
+        entity.setEntity(entityType);
 
         for (int i = 0; i < values.length; i++) {
-            AttributeValue attributeValue = new AttributeValue();
-            attributeValue.setValue(values[i]);
+            Property property = new Property();
+            property.setValue(values[i]);
 
-            if (entity != null) {
-                attributeValue.setAttribute(entity.getAttributes().get(i));
+            if (entityType != null) {
+                property.setAttribute(entityType.getAttributes().get(i));
             }
 
-            attributeValue.setInstance(instance);
-            instance.getValues().add(attributeValue);
+            property.setInstance(entity);
+            entity.getValues().add(property);
         }
-        return facade.create(instance);
+        return facade.create(entity);
     }
 
     public static void expectExceptionOnCreateInvalidInstance(String entityFullName, String exceptedMessage,
             String... values) {
 
         try {
-            Entity entity = null;
+            EntityType entityType = null;
             if (entityFullName != null) {
-                entity = facade.findEntityByFullName(entityFullName);
+                entityType = facade.findEntityByFullName(entityFullName);
             }
 
-            createOneInstance(entity, values);
+            createOneInstance(entityType, values);
             fail();
         } catch (MetadataException metadataException) {
             Assert.assertEquals(exceptedMessage, metadataException.getMessage());
@@ -63,28 +63,28 @@ public class InstanceHelper {
 
     public static void createAndVerifyOneInstance(String entityFullName, String... values) {
 
-        Entity entity = null;
+        EntityType entityType = null;
         if (entityFullName != null) {
-            entity = facade.findEntityByFullName(entityFullName);
+            entityType = facade.findEntityByFullName(entityFullName);
         }
 
-        int numberOfInstances = facade.findInstancesByEntityId(entity.getId()).size();
+        int numberOfInstances = facade.findInstancesByEntityId(entityType.getId()).size();
 
-        Instance newInstance = createOneInstance(entity, values);
+        Entity newInstance = createOneInstance(entityType, values);
 
         Assert.assertNotNull(newInstance.getId());
         Assert.assertEquals(new Integer(0), newInstance.getVersion());
 
-        Instance createdInstance = facade.findInstanceById(newInstance.getId());
+        Entity createdInstance = facade.findInstanceById(newInstance.getId());
         Assert.assertEquals(newInstance, createdInstance);
         Assert.assertEquals(entityFullName, createdInstance.getEntity().getFullName());
 
         verifyAllAttributesValues(createdInstance, values);
 
-        List<Instance> instances = facade.findInstancesByEntityId(entity.getId());
+        List<Entity> entities = facade.findInstancesByEntityId(entityType.getId());
 
-        Assert.assertEquals(numberOfInstances + 1, instances.size());
-        Instance listedInstance = instances.get(numberOfInstances);
+        Assert.assertEquals(numberOfInstances + 1, entities.size());
+        Entity listedInstance = entities.get(numberOfInstances);
         Assert.assertEquals(newInstance, listedInstance);
         Assert.assertEquals(entityFullName, listedInstance.getEntity().getFullName());
 
@@ -92,11 +92,11 @@ public class InstanceHelper {
 
     }
 
-    private static void verifyAllAttributesValues(Instance createdInstance, String... values) {
+    private static void verifyAllAttributesValues(Entity createdInstance, String... values) {
 
         for (int i = 0; i < values.length; i++) {
             String value = values[i];
-            AttributeValue createdValue = createdInstance.getValues().get(i);
+            Property createdValue = createdInstance.getValues().get(i);
 
             Assert.assertNotNull("Id was null", createdValue.getId());
 
@@ -108,38 +108,38 @@ public class InstanceHelper {
         }
     }
 
-    private static boolean usesDefaultConfiguration(String value, AttributeValue createdValue) {
+    private static boolean usesDefaultConfiguration(String value, Property createdValue) {
 
         return ((value == null) || value.isEmpty()) && (createdValue.getAttribute().getConfiguration() != null)
-                && (createdValue.getAttribute().getConfiguration().contains(Attribute.DEFAULT_CONFIGURATION_NAME));
+                && (createdValue.getAttribute().getConfiguration().contains(PropertyType.DEFAULT_CONFIGURATION_NAME));
     }
 
-    public static AttributeValue newAttributeValue(String attributeName, String entityFullName, String value) {
+    public static Property newAttributeValue(String attributeName, String entityFullName, String value) {
 
-        AttributeValue attributeValue = new AttributeValue();
-        attributeValue.setAttribute(facade.findAttributeByNameAndEntityFullName(attributeName, entityFullName));
-        attributeValue.setValue(value);
-        return attributeValue;
+        Property property = new Property();
+        property.setAttribute(facade.findAttributeByNameAndEntityFullName(attributeName, entityFullName));
+        property.setValue(value);
+        return property;
     }
 
-    private static void validateThatDefaultConfigurationWasAppliedToValue(AttributeValue attributeValue) {
+    private static void validateThatDefaultConfigurationWasAppliedToValue(Property property) {
         JsonNode jsonNode = null;
         try {
-            jsonNode = JsonNodeUtil.validate(attributeValue.getAttribute().getConfiguration(), null);
+            jsonNode = JsonNodeUtil.validate(property.getAttribute().getConfiguration(), null);
         } catch (Exception e) {
             fail();
             throw new RuntimeException("Json configuration is in invalid format");
         }
-        String defaultField = jsonNode.get(Attribute.DEFAULT_CONFIGURATION_NAME).asText();
-        Assert.assertEquals(attributeValue.getValue(), defaultField);
+        String defaultField = jsonNode.get(PropertyType.DEFAULT_CONFIGURATION_NAME).asText();
+        Assert.assertEquals(property.getValue(), defaultField);
     }
 
-    static AttributeValue attributeValue(String attributeName, String objValue) {
-        Attribute attribute = new Attribute();
-        attribute.setName(attributeName);
-        AttributeValue value = new AttributeValue();
+    static Property property(String attributeName, String objValue) {
+        PropertyType propertyType = new PropertyType();
+        propertyType.setName(attributeName);
+        Property value = new Property();
         value.setValue(objValue);
-        value.setAttribute(attribute);
+        value.setAttribute(propertyType);
         return value;
     }
 

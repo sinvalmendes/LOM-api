@@ -7,8 +7,8 @@ public class RelationType {
     private Long id;
     private Integer version;
     private String name;
-    private Entity sourceEntity;
-    private Entity targetEntity;
+    private EntityType sourceEntityType;
+    private EntityType targetEntityType;
     private boolean isBidirectional;
     private String reverseName;
     private Cardinality sourceCardinality;
@@ -38,20 +38,20 @@ public class RelationType {
         this.name = name;
     }
 
-    public Entity getSourceEntity() {
-        return sourceEntity;
+    public EntityType getSourceEntityType() {
+        return sourceEntityType;
     }
 
-    public void setSourceEntity(Entity sourceEntity) {
-        this.sourceEntity = sourceEntity;
+    public void setSourceEntityType(EntityType sourceEntityType) {
+        this.sourceEntityType = sourceEntityType;
     }
 
-    public Entity getTargetEntity() {
-        return targetEntity;
+    public EntityType getTargetEntityType() {
+        return targetEntityType;
     }
 
-    public void setTargetEntity(Entity targetEntity) {
-        this.targetEntity = targetEntity;
+    public void setTargetEntityType(EntityType targetEntityType) {
+        this.targetEntityType = targetEntityType;
     }
 
     public boolean isBidirecticonal() {

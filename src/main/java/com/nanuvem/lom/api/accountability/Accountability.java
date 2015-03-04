@@ -1,11 +1,14 @@
 package com.nanuvem.lom.api.accountability;
 
 public class Accountability {
-    private Instance parent;
-    private Instance child;
+
+    private Long id;
+    private Integer version;
+    private Entity parent;
+    private Entity child;
     private AccountabilityType accountabilityType;
 
-    public Accountability(Instance parent, Instance child, AccountabilityType accountabilityType) {
+    public Accountability(Entity parent, Entity child, AccountabilityType accountabilityType) {
         this.parent = parent;
         this.parent.addChildAccountability(this);
         this.child = child;
@@ -13,14 +16,30 @@ public class Accountability {
         this.accountabilityType = accountabilityType;
     }
 
-    public static Accountability create(Instance parent, Instance child, AccountabilityType accountabilityType) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public static Accountability create(Entity parent, Entity child, AccountabilityType accountabilityType) {
         if (!canCreate(parent, child, accountabilityType))
             throw new IllegalArgumentException("Invalid Accountability");
         else
             return new Accountability(parent, child, accountabilityType);
     }
 
-    public static boolean canCreate(Instance parent, Instance child, AccountabilityType accountabilityType) {
+    public static boolean canCreate(Entity parent, Entity child, AccountabilityType accountabilityType) {
         if (parent.equals(child))
             return false;
         if (parent.ancestorsInclude(child, accountabilityType))
@@ -28,19 +47,19 @@ public class Accountability {
         return true;
     }
 
-    public Instance getParent() {
+    public Entity getParent() {
         return parent;
     }
 
-    public void setParent(Instance parent) {
+    public void setParent(Entity parent) {
         this.parent = parent;
     }
 
-    public Instance getChild() {
+    public Entity getChild() {
         return child;
     }
 
-    public void setChild(Instance child) {
+    public void setChild(Entity child) {
         this.child = child;
     }
 

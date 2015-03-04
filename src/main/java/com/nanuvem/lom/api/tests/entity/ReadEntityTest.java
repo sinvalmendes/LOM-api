@@ -10,19 +10,19 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.EntityType;
 import com.nanuvem.lom.api.tests.LomTestCase;
 
 public abstract class ReadEntityTest extends LomTestCase {
 
     @Test
     public void listallEntities() {
-        List<Entity> allEntities = facade.listAllEntities();
+        List<EntityType> allEntities = facade.listAllEntities();
         Assert.assertEquals(0, allEntities.size());
 
-        Entity entity1 = createAndSaveOneEntity("ns1", "n1");
-        Entity entity2 = createAndSaveOneEntity("ns2", "n2");
-        Entity entity3 = createAndSaveOneEntity("ns2", "n3");
+        EntityType entity1 = createAndSaveOneEntity("ns1", "n1");
+        EntityType entity2 = createAndSaveOneEntity("ns2", "n2");
+        EntityType entity3 = createAndSaveOneEntity("ns2", "n3");
 
         allEntities = facade.listAllEntities();
 
@@ -43,15 +43,15 @@ public abstract class ReadEntityTest extends LomTestCase {
         String namespaceFragment = "ns";
         String nameFragment = "n";
 
-        List<Entity> allEntities = facade.listEntitiesByFullName(namespaceFragment);
+        List<EntityType> allEntities = facade.listEntitiesByFullName(namespaceFragment);
         Assert.assertEquals(0, allEntities.size());
 
         allEntities = facade.listEntitiesByFullName(nameFragment);
         Assert.assertEquals(0, allEntities.size());
 
-        Entity entity1 = createAndSaveOneEntity("ns1", "n1");
-        Entity entity2 = createAndSaveOneEntity("ns2", "n2");
-        Entity entity3 = createAndSaveOneEntity("ns2", "n3");
+        EntityType entity1 = createAndSaveOneEntity("ns1", "n1");
+        EntityType entity2 = createAndSaveOneEntity("ns2", "n2");
+        EntityType entity3 = createAndSaveOneEntity("ns2", "n3");
 
         allEntities = facade.listEntitiesByFullName(namespaceFragment);
         Assert.assertEquals(3, allEntities.size());
@@ -74,14 +74,14 @@ public abstract class ReadEntityTest extends LomTestCase {
 
     @Test
     public void listEntitiesByEmptyNameAndPackage() {
-        List<Entity> allEntities = facade.listEntitiesByFullName("");
+        List<EntityType> allEntities = facade.listEntitiesByFullName("");
         Assert.assertEquals(0, allEntities.size());
 
-        Entity entity1 = createAndSaveOneEntity("ns1", "n1");
-        Entity entity2 = createAndSaveOneEntity("ns2", "n2");
-        Entity entity3 = createAndSaveOneEntity("ns2", "n3");
+        EntityType entity1 = createAndSaveOneEntity("ns1", "n1");
+        EntityType entity2 = createAndSaveOneEntity("ns2", "n2");
+        EntityType entity3 = createAndSaveOneEntity("ns2", "n3");
 
-        List<Entity> allEntities1 = facade.listEntitiesByFullName("");
+        List<EntityType> allEntities1 = facade.listEntitiesByFullName("");
         Assert.assertEquals(3, allEntities1.size());
         Assert.assertEquals(entity1, allEntities1.get(0));
         Assert.assertEquals(entity2, allEntities1.get(1));
@@ -104,15 +104,15 @@ public abstract class ReadEntityTest extends LomTestCase {
 
     @Test
     public void listEntitiesForcingCaseInsensitivePackagesAndNames() {
-        Entity entity1 = createAndSaveOneEntity("ns1", "n1");
-        Entity entity2 = createAndSaveOneEntity("NS2", "n2");
-        Entity entity3 = createAndSaveOneEntity("NS3", "N3");
-        List<Entity> expectedEntities = new ArrayList<Entity>();
+        EntityType entity1 = createAndSaveOneEntity("ns1", "n1");
+        EntityType entity2 = createAndSaveOneEntity("NS2", "n2");
+        EntityType entity3 = createAndSaveOneEntity("NS3", "N3");
+        List<EntityType> expectedEntities = new ArrayList<EntityType>();
         expectedEntities.add(entity1);
         expectedEntities.add(entity2);
         expectedEntities.add(entity3);
 
-        List<Entity> allEntities1 = facade.listEntitiesByFullName("ns");
+        List<EntityType> allEntities1 = facade.listEntitiesByFullName("ns");
         Assert.assertEquals(3, allEntities1.size());
         Assert.assertEquals(entity1, allEntities1.get(0));
         Assert.assertEquals(entity2, allEntities1.get(1));
@@ -151,19 +151,19 @@ public abstract class ReadEntityTest extends LomTestCase {
     public void getEntityByValidNameAndPackage() {
         Assert.assertEquals(0, facade.listEntitiesByFullName("ns.n").size());
 
-        Entity entity1 = createEntity("ns1", "n1");
-        Entity foundEntity1 = facade.findEntityByFullName("ns1.n1");
+        EntityType entity1 = createEntity("ns1", "n1");
+        EntityType foundEntity1 = facade.findEntityByFullName("ns1.n1");
         Assert.assertEquals(entity1, foundEntity1);
 
-        Entity entity2 = createEntity("ns2", "n2");
-        Entity foundEntity2 = facade.findEntityByFullName("ns2.n2");
+        EntityType entity2 = createEntity("ns2", "n2");
+        EntityType foundEntity2 = facade.findEntityByFullName("ns2.n2");
         Assert.assertEquals(entity2, foundEntity2);
 
         Assert.assertEquals(1, facade.listEntitiesByFullName("ns1.n").size());
         Assert.assertEquals(0, facade.listEntitiesByFullName("ns.n1").size());
         Assert.assertEquals(0, facade.listEntitiesByFullName("ns2.n1").size());
 
-        List<Entity> allEntities = facade.listAllEntities();
+        List<EntityType> allEntities = facade.listAllEntities();
         Assert.assertEquals(2, allEntities.size());
         Assert.assertEquals(entity1, allEntities.get(0));
         Assert.assertEquals(entity2, allEntities.get(1));
@@ -172,10 +172,10 @@ public abstract class ReadEntityTest extends LomTestCase {
     @Test
     public void getEntityByEmptyNameAndPackage() {
         createEntity("ns1", "n1");
-        Entity entity2 = createEntity(null, "n2");
+        EntityType entity2 = createEntity(null, "n2");
         Assert.assertEquals(1, facade.listEntitiesByFullName(".n1").size());
 
-        Entity foundEntity2 = facade.findEntityByFullName("n2");
+        EntityType foundEntity2 = facade.findEntityByFullName("n2");
         Assert.assertEquals(entity2, foundEntity2);
         Assert.assertEquals(1, facade.listEntitiesByFullName("ns1.").size());
     }
@@ -189,24 +189,24 @@ public abstract class ReadEntityTest extends LomTestCase {
 
     @Test
     public void getEntityForcingCaseInsensitivePackagesAndNames() {
-        Entity entity = createEntity("nS", "nA");
-        Entity ea = facade.findEntityByFullName("ns.na");
-        Assert.assertEquals(entity, ea);
+        EntityType entityType = createEntity("nS", "nA");
+        EntityType ea = facade.findEntityByFullName("ns.na");
+        Assert.assertEquals(entityType, ea);
 
         ea = facade.findEntityByFullName("NS.NA");
-        Assert.assertEquals(entity, ea);
+        Assert.assertEquals(entityType, ea);
 
         ea = facade.findEntityByFullName("nS.nA");
-        Assert.assertEquals(entity, ea);
+        Assert.assertEquals(entityType, ea);
 
         ea = facade.findEntityByFullName("NS.na");
-        Assert.assertEquals(entity, ea);
+        Assert.assertEquals(entityType, ea);
 
         ea = facade.findEntityByFullName("ns.NA");
-        Assert.assertEquals(entity, ea);
+        Assert.assertEquals(entityType, ea);
 
         ea = facade.findEntityByFullName("Ns.Na");
-        Assert.assertEquals(entity, ea);
+        Assert.assertEquals(entityType, ea);
 
     }
 

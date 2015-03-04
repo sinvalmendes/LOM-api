@@ -12,7 +12,7 @@ import static com.nanuvem.lom.api.tests.entity.EntityHelper.createEntity;
 
 import org.junit.Test;
 
-import com.nanuvem.lom.api.Attribute;
+import com.nanuvem.lom.api.PropertyType;
 import com.nanuvem.lom.api.tests.LomTestCase;
 
 public abstract class TextAttributeTest extends LomTestCase {
@@ -98,29 +98,29 @@ public abstract class TextAttributeTest extends LomTestCase {
     public void validChangeConfigurationForTextAttributeType() {
         createEntity("abc", "a");
 
-        Attribute createdAttribute1 = createOneAttribute("abc.a", null, "pa", TEXT, MANDATORY_TRUE);
-        Attribute createdAttribute2 = createOneAttribute("abc.a", null, "pb", TEXT, TEXT_CONFIGURATION_COMPLETE);
+        PropertyType createdAttribute1 = createOneAttribute("abc.a", null, "pa", TEXT, MANDATORY_TRUE);
+        PropertyType createdAttribute2 = createOneAttribute("abc.a", null, "pb", TEXT, TEXT_CONFIGURATION_COMPLETE);
 
-        Attribute updatedAttribute11 = updateAttribute("abc.a", createdAttribute1, 1, "pa", TEXT,
+        PropertyType updatedAttribute11 = updateAttribute("abc.a", createdAttribute1, 1, "pa", TEXT,
                 TEXT_CONFIGURATION_PARTIAL);
         verifyUpdatedAttribute(createdAttribute1, updatedAttribute11);
 
-        Attribute updatedAttribute12 = updateAttribute("abc.a", updatedAttribute11, 1, "pa", TEXT,
+        PropertyType updatedAttribute12 = updateAttribute("abc.a", updatedAttribute11, 1, "pa", TEXT,
                 TEXT_CONFIGURATION_COMPLETE);
         verifyUpdatedAttribute(updatedAttribute11, updatedAttribute12);
 
-        Attribute updatedAttribute21 = updateAttribute("abc.a", createdAttribute2, 2, "pb", TEXT,
+        PropertyType updatedAttribute21 = updateAttribute("abc.a", createdAttribute2, 2, "pb", TEXT,
                 TEXT_CONFIGURATION_PARTIAL);
         verifyUpdatedAttribute(createdAttribute2, updatedAttribute21);
 
-        Attribute updatedAttribute22 = updateAttribute("abc.a", updatedAttribute21, 2, "pb", TEXT, MANDATORY_TRUE);
+        PropertyType updatedAttribute22 = updateAttribute("abc.a", updatedAttribute21, 2, "pb", TEXT, MANDATORY_TRUE);
         verifyUpdatedAttribute(updatedAttribute21, updatedAttribute22);
 
-        Attribute updatedAttribute23 = updateAttribute("abc.a", updatedAttribute22, 2, "pb", TEXT,
+        PropertyType updatedAttribute23 = updateAttribute("abc.a", updatedAttribute22, 2, "pb", TEXT,
                 "{\"default\":\"abc\"}");
         verifyUpdatedAttribute(updatedAttribute22, updatedAttribute23);
 
-        Attribute updatedAttribute24 = updateAttribute("abc.a", updatedAttribute23, 2, "pb", TEXT,
+        PropertyType updatedAttribute24 = updateAttribute("abc.a", updatedAttribute23, 2, "pb", TEXT,
                 "{\"default\":\"123\"}");
         verifyUpdatedAttribute(updatedAttribute23, updatedAttribute24);
     }
@@ -128,7 +128,7 @@ public abstract class TextAttributeTest extends LomTestCase {
     @Test
     public void invalidChangeConfigurationForTextAttributeType() {
         createEntity("abc", "a");
-        Attribute createdAttribute = createOneAttribute("abc.a", null, "pa", TEXT, null);
+        PropertyType createdAttribute = createOneAttribute("abc.a", null, "pa", TEXT, null);
 
         expectExceptionOnUpdateInvalidAttribute("abc.a", createdAttribute, 1, "pa", TEXT, "{\"mandatory\":10}",
                 "Invalid configuration for attribute pa: the mandatory value must be true or false literals");

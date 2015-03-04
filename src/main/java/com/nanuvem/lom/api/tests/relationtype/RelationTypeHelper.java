@@ -1,7 +1,7 @@
 package com.nanuvem.lom.api.tests.relationtype;
 
 import com.nanuvem.lom.api.Cardinality;
-import com.nanuvem.lom.api.Entity;
+import com.nanuvem.lom.api.EntityType;
 import com.nanuvem.lom.api.Facade;
 import com.nanuvem.lom.api.RelationType;
 
@@ -13,12 +13,12 @@ public class RelationTypeHelper {
         RelationTypeHelper.facade = facade;
     }
 
-    public static RelationType createRelationType(String name, Entity sourceEntity, Entity targetEntity,
+    public static RelationType createRelationType(String name, EntityType sourceEntity, EntityType targetEntity,
             Cardinality sourceCardinality, Cardinality targetCardinality, boolean isBidirectional, String reverseName) {
         RelationType relationType = new RelationType();
         relationType.setName(name);
-        relationType.setSourceEntity(sourceEntity);
-        relationType.setTargetEntity(targetEntity);
+        relationType.setSourceEntityType(sourceEntity);
+        relationType.setTargetEntityType(targetEntity);
         relationType.setSourceCardinality(sourceCardinality);
         relationType.setTargetCardinality(targetCardinality);
         relationType.setBidirectional(isBidirectional);
